@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using CotpsBot.Models.Http;
+using CotpsBot.Services.Http;
 using CotpsBot.Validators;
 using CotpsBot.Validators.Rules;
+using OutsideWorks.Helpers;
 using Xamarin.Forms;
 
 namespace CotpsBot.ViewModels
@@ -9,10 +13,12 @@ namespace CotpsBot.ViewModels
     public class MainPageViewModel: BaseViewModel
     {
         #region Fields
-
+        
         private string taskMessage = String.Empty;
+        private bool isRunning;
         private ValidatableObject<string> phoneNumber;
         private ValidatableObject<string> password;
+        public IRequestService ApiClient => DependencyService.Get<IRequestService>();
 
         #endregion
         
@@ -29,6 +35,12 @@ namespace CotpsBot.ViewModels
         #endregion
 
         #region Properties
+
+        public bool IsRunning
+        {
+            get => this.isRunning;
+            set => this.SetProperty(ref this.isRunning, value);
+        }
 
         public string TaskMessage
         {
@@ -57,14 +69,35 @@ namespace CotpsBot.ViewModels
 
         #region Methods
 
-        public void SwitchClicked(object obj)
+        public async void SwitchClicked(object obj)
         {
-            this.DoTransactions();
+            this.IsRunning = !this.IsRunning;
+            await this.DoTransactions();
         }
 
-        private void DoTransactions()
+        private async Task DoTransactions()
         {
-            
+            try
+            {
+                this.TaskMessage = "Loging to COTPS...";
+                var form = new LoginRequest
+                {
+                    mobile = this.PhoneNumber.Value,
+                    password = this.Password.Value,
+                    type = Settings.APILoginType
+                };
+                var loginResult = await ApiClient.LoginAsync(form);
+                if (loginResult != null)
+                {
+                    this.TaskMessage = "Bot running! :)";
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         
         private void InitializeProperties()

@@ -8,14 +8,20 @@
             
         </viewModels:MainPageViewModel>
     </ContentPage.BindingContext>
-    <StackLayout >
-        <Label Text="Username:"/>
+    <StackLayout VerticalOptions="EndAndExpand" Padding="40">
+        <Label Text="Status:"/>
+        <Entry 
+            Placeholder="Bot Status" x:Name="EntryStatus"
+            IsReadOnly="True"
+            Text="{Binding TaskMessage}"/>
+        
+        <Label Text="Phone:"/>
         <Entry 
             Placeholder="Your Phone" x:Name="EntryPhoneNumber"
             Text="{Binding PhoneNumber.Value}"/>
                 
         <Label Text="Password:"/>
-        <Entry 
+        <Entry
             IsPassword="True"
             Placeholder="Your Password" x:Name="EntryPassword"
             Text="{Binding Password.Value}"/>

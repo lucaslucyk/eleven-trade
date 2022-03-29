@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CotpsBot.Models.Http;
 
 namespace CotpsBot.Services.Http
 {
@@ -7,6 +8,8 @@ namespace CotpsBot.Services.Http
     {
         Task<TResult> GetAsync<TResult>(string uri, string token = "");
         Task<TResult> GetAsync<TResult>(string uri, IEnumerable<KeyValuePair<string, object>> parameters);
-        Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data, string token = "");
+        Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data);
+        Task<LoginResponse> LoginAsync(LoginRequest form);
+        void Logout();
     }
 }

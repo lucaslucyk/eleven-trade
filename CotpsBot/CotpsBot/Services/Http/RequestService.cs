@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CotpsBot.Exceptions;
+using CotpsBot.Models.Http;
 using Newtonsoft.Json;
 using OutsideWorks.Helpers;
 using Xamarin.Essentials;
@@ -22,6 +24,23 @@ namespace CotpsBot.Services.Http
 
         #endregion
 
+        #region Constructor
+
+        public RequestService()
+        {
+            try
+            {
+                SetupClient();
+            }
+            catch
+            {
+                // ignored
+                Debug.WriteLine("Can't create API Client.");
+            }
+        }
+
+        #endregion
+        
         #region Methods
 
         private static void SetupClient()
@@ -38,7 +57,12 @@ namespace CotpsBot.Services.Http
             _client.DefaultRequestHeaders.Connection.Add("close");
         }
 
-        public static void SetToken(string token)
+        public void Logout()
+        {
+            _client.DefaultRequestHeaders.Authorization = null;
+        }
+
+        private static void SetToken(string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
@@ -49,8 +73,17 @@ namespace CotpsBot.Services.Http
                 throw new InternetException("No Internet Connection");
         }
         
-        private async Task HandleResponse(HttpResponseMessage response)
+        private static async Task HandleResponse(HttpResponseMessage response, bool catchToken = false)
         {
+            if (catchToken && response.IsSuccessStatusCode)
+            {
+                response.Headers.TryGetValues("Authorization", out var tokens);
+                var tokenList = tokens.ToList();
+                if (tokenList.Any())
+                    SetToken(tokenList.First());
+            }
+            
+            
             if (!response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync()
@@ -68,7 +101,6 @@ namespace CotpsBot.Services.Http
         
         public async Task<TResult> GetAsync<TResult>(string uri, string token = "")
         {
-            // setupHttpClient(token);
             CheckConnection();
             HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
             await HandleResponse(response);
@@ -96,26 +128,40 @@ namespace CotpsBot.Services.Http
             // get with params
             return await GetAsync<TResult>($"{uri}{builder.ToString()}");
         }
-        
-        public async Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data, string token = "")
+
+        private static Dictionary<string, string> GetFormData(Models.Http.LoginRequest data)
         {
-            // setupHttpClient(token);
+            return new Dictionary<string, string>
+            {
+                {"mobile", data.mobile},
+                {"password", data.password},
+                {"type", data.type}
+            };
+        }
+
+        public async Task<LoginResponse> LoginAsync(LoginRequest form)
+        {
+            CheckConnection();
+            var formData = GetFormData(form);
+            HttpResponseMessage response = await _client.PostAsync(
+                Settings.APILoginUrl,
+                new FormUrlEncodedContent(formData));
+            
+            await HandleResponse(response, true);
+            
+            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return await Task.Run(() => JsonConvert.DeserializeObject<LoginResponse>(responseData)).ConfigureAwait(false);
+        }
+
+        public async Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data)
+        {
             CheckConnection();
             
+
             string serialized = await Task.Run(() => JsonConvert.SerializeObject(data))
-                .ConfigureAwait(false);
+            .ConfigureAwait(false);
             // empty response data to work 
             var responseData = string.Empty;
-
-            // check cache if not internet connection
-            // try to get from cache
-            // if (!String.IsNullOrWhiteSpace(cacheKey))
-            // {
-            //     if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-            //         responseData = Barrel.Current.Get<string>(cacheKey);
-            //     else if (!Barrel.Current.IsExpired(cacheKey))
-            //         responseData = Barrel.Current.Get<string>(cacheKey);
-            // }
 
             if (String.IsNullOrWhiteSpace(responseData))
             {
@@ -127,12 +173,8 @@ namespace CotpsBot.Services.Http
                 await HandleResponse(response);
 
                 responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                // if (!String.IsNullOrWhiteSpace(cacheKey))
-                //     Barrel.Current.Add(cacheKey, responseData, TimeSpan.FromMinutes(mins));
             }
 
-            // if (refreshCookies) GetCookies(response);
             return await Task.Run(() => JsonConvert.DeserializeObject<TResult>(responseData)).ConfigureAwait(false);
         }
 

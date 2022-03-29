@@ -20,7 +20,7 @@ namespace CotpsBot
             InitializeComponent();
 
             ApiClient = new RequestService();
-            DependencyService.RegisterSingleton<Services.Http.IRequestService>(ApiClient);
+            DependencyService.RegisterSingleton<IRequestService>(ApiClient);
 
             MainPage = new MainPage();
         }

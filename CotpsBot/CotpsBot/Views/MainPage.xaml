@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CotpsBot.ViewModels"
+             x:Class="CotpsBot.Views.MainPage">
+    <ContentPage.BindingContext>
+        <viewModels:MainPageViewModel>
+            
+        </viewModels:MainPageViewModel>
+    </ContentPage.BindingContext>
+    <StackLayout >
+        <Label Text="Username:"/>
+        <Entry 
+            Placeholder="Your Phone" x:Name="EntryPhoneNumber"
+            Text="{Binding PhoneNumber.Value}"/>
+                
+        <Label Text="Password:"/>
+        <Entry 
+            IsPassword="True"
+            Placeholder="Your Password" x:Name="EntryPassword"
+            Text="{Binding Password.Value}"/>
+        
+        <Button 
+            Text="Start Bot"
+            Command="{Binding SwitchCommand}"/>
+    </StackLayout>
+
+</ContentPage>

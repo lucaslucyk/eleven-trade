@@ -10,6 +10,9 @@ namespace CotpsBot.Services.Http
         Task<TResult> GetAsync<TResult>(string uri, IEnumerable<KeyValuePair<string, object>> parameters);
         Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data);
         Task<LoginResponse> LoginAsync(LoginRequest form);
+        Task<BalanceResponse> GetBalance();
+        Task<OrderCreateResponse> CreateOrder();
+        Task<OrderConfirmResponse> ConfirmOrder(string orderId);
         void Logout();
     }
 }

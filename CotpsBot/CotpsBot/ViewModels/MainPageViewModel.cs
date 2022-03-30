@@ -124,7 +124,7 @@ namespace CotpsBot.ViewModels
         
         private async void TimerElapsed(object source, ElapsedEventArgs e)
         {
-            await this.DoTransactions();
+            await this.CotpsOperate();
         }
         
         private async void RememberTapped(object obj)
@@ -136,7 +136,7 @@ namespace CotpsBot.ViewModels
 
         private async Task BotStart()
         {
-            await this.DoTransactions();
+            await this.CotpsOperate();
             this.timer.Start();
         }
         private void BotStop()
@@ -195,13 +195,60 @@ namespace CotpsBot.ViewModels
         {
             SecureStorage.RemoveAll();
         }
-        
+
+        private void UpdateBalance(BalanceInfo data)
+        {
+            this.Balance.Total = data.total_balance;
+            this.Balance.Freeze = data.freeze_balance;
+            this.Balance.Free = data.balance;
+            
+            OnPropertyChanged("Balance");
+        }
+
+        private async Task Operate()
+        {
+            this.TaskMessage = "Creating order...";
+            var order = await ApiClient.CreateOrder();
+            if (order.success)
+            {
+                this.TaskMessage = $"Confirming order {order.data.orderId}...";
+                var confirm = await ApiClient.ConfirmOrder(order.data.orderId);
+
+                if (confirm.success)
+                {
+                    await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar("Order confirmed succesfully."));
+                    await DoTransactions();
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(confirm.msg));
+                }
+            }
+        }
+
         private async Task DoTransactions()
+        {
+            var balanceResponse = await ApiClient.GetBalance();
+            if (balanceResponse.success)
+            {
+                UpdateBalance(balanceResponse.userinfo);
+
+                var converted = Convert.ToDouble(balanceResponse.userinfo.balance);
+                if (converted >= 5.0)
+                {
+                    await Operate();
+                }
+            }
+
+            this.TaskMessage = "Running! :)";
+        }
+        
+        private async Task CotpsOperate()
         {
             try
             {
                 this.SwitchEnabled = false;
-                this.TaskMessage = "Loging to COTPS...";
+                this.TaskMessage = "Logging into COTPS...";
                 var form = new LoginRequest
                 {
                     mobile = this.PhoneNumber.Value,
@@ -215,6 +262,9 @@ namespace CotpsBot.ViewModels
                     this.TaskMessage = "Running! :)";
                     this.SwitchMessage = "Bot Stop";
                     this.LastRun = DateTime.Now;
+                    
+                    // try to create and confirm orders
+                    await this.DoTransactions();
                     
                     // logout after of do actions
                     ApiClient.Logout();
@@ -245,6 +295,7 @@ namespace CotpsBot.ViewModels
         {
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
+            this.Balance = new TransactionsBalance();
         }
         
         public bool AreFieldsValid()

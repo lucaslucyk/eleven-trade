@@ -1,9 +1,9 @@
 ﻿namespace CotpsBot.Models.Http
 {
-    public class LoginResponse: BaseResponse
+    public class OrderCreateResponse: BaseResponse
     {
         public int code { get; set; }
         public string msg { get; set; }
-        public UserInfo userinfo { get; set; }
+        public OrderCreateData data { get; set; }
     }
 }

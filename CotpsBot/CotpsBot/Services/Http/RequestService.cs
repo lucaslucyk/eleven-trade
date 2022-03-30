@@ -153,10 +153,25 @@ namespace CotpsBot.Services.Http
             return await Task.Run(() => JsonConvert.DeserializeObject<LoginResponse>(responseData)).ConfigureAwait(false);
         }
 
+        public async Task<BalanceResponse> GetBalance()
+        {
+            return await GetAsync<BalanceResponse>(Settings.APIBalanceUrl);
+        }
+
+        public async Task<OrderCreateResponse> CreateOrder()
+        {
+            return await GetAsync<OrderCreateResponse>(Settings.APIOrderCreateUrl);
+        }
+
+        public async Task<OrderConfirmResponse> ConfirmOrder(string orderId)
+        {
+            var finalUri = $"{Settings.APIOrderSubmitUrl}?orderId={orderId}";
+            return await GetAsync<OrderConfirmResponse>(finalUri);
+        }
+
         public async Task<TResult> PostAsync<TRequest, TResult>(string uri, TRequest data)
         {
             CheckConnection();
-            
 
             string serialized = await Task.Run(() => JsonConvert.SerializeObject(data))
             .ConfigureAwait(false);

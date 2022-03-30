@@ -22,8 +22,8 @@
         public int deal_count {get; set;}
         public int deal_plan {get; set;}
         public int deal_num {get; set;}
-        public int deal_time {get; set;}
-        public int deal_profit {get; set;}
+        public long deal_time {get; set;}
+        public double deal_profit {get; set;}
         public int fee {get; set;}
         public int in_fee {get; set;}
         public int del_address_count {get; set;}
@@ -47,8 +47,8 @@
         public int has_four_profit {get; set;}
         public string avatar {get; set;}
         public string trans_password {get; set;}
-        public int in_balance {get; set;}
-        public int out_balance {get; set;}
+        public string in_balance {get; set;}
+        public string out_balance {get; set;}
         public string email {get; set;}
         public bool is_email_valid {get; set;}
         public bool is_mobile_valid {get; set;}
@@ -57,7 +57,7 @@
         public double balance {get; set;}
         public double frozen_balance {get; set;}
         public double freeze_balance {get; set;}
-        public int lixibao_freeze_balance {get; set;}
+        public double lixibao_freeze_balance {get; set;}
         public long createTime {get; set;}
         public int status {get; set;}
         public int is_black {get; set;}
@@ -69,6 +69,7 @@
         public string registe_time {get; set;}
         public string inviteCode {get; set;}
         public int __v {get; set;}
+        public string ip { get; set; }
         public string accountTypeTxt {get; set;}
     }
 }

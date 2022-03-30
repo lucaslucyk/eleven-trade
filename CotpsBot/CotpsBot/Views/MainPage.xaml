@@ -2,33 +2,222 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:CotpsBot.ViewModels"
+             xmlns:converters="clr-namespace:CotpsBot.Converters"
              x:Class="CotpsBot.Views.MainPage">
     <ContentPage.BindingContext>
         <viewModels:MainPageViewModel>
             
         </viewModels:MainPageViewModel>
     </ContentPage.BindingContext>
-    <StackLayout VerticalOptions="EndAndExpand" Padding="40">
-        <Label Text="Status:"/>
-        <Entry 
-            Placeholder="Bot Status" x:Name="EntryStatus"
-            IsReadOnly="True"
-            Text="{Binding TaskMessage}"/>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <StackLayout Padding="40">
         
-        <Label Text="Phone:"/>
-        <Entry 
-            Placeholder="Your Phone" x:Name="EntryPhoneNumber"
-            Text="{Binding PhoneNumber.Value}"/>
-                
-        <Label Text="Password:"/>
-        <Entry
-            IsPassword="True"
-            Placeholder="Your Password" x:Name="EntryPassword"
-            Text="{Binding Password.Value}"/>
+        <StackLayout VerticalOptions="Start">
+            <!--<Label Text="Status:"/>
+            <Entry 
+                Placeholder="Bot Status" x:Name="EntryStatus"
+                IsReadOnly="True"
+                Text="{Binding TaskMessage}"/>-->
+            
+            <!-- Status section -->
+            <StackLayout>
+                <Label
+                    Margin="16, 10, 16, 0"
+                    FontSize="16"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1, Android=1.25}"
+                    Text="Bot Status"
+                    TextColor="DimGray"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <BoxView Color="Gray" VerticalOptions="Center" HeightRequest="1" BackgroundColor="DimGray"/>
+                <Grid
+                    BackgroundColor="Transparent"
+                    ColumnDefinitions="*"
+                    ColumnSpacing="5"
+                    RowSpacing="0"
+                    Padding="30, 0">
+                                
+                    <Label
+                        Grid.Column="0"
+                        Margin="16,5"
+                        TextColor="Gray"
+                        HorizontalOptions="Start"
+                        FontSize="14"
+                        Text="{Binding TaskMessage}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </StackLayout>
+            
+            <!-- Timestamp section -->
+            <StackLayout>
+                <Label
+                    Margin="16, 10, 16, 0"
+                    FontSize="16"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1, Android=1.25}"
+                    Text="Last Run"
+                    TextColor="DimGray"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <BoxView Color="Gray" VerticalOptions="Center" HeightRequest="1" BackgroundColor="DimGray"/>
+                <Grid
+                    BackgroundColor="Transparent"
+                    ColumnDefinitions="*"
+                    ColumnSpacing="5"
+                    RowSpacing="0"
+                    Padding="30, 0">
+                                
+                    <Label
+                        Grid.Column="0"
+                        Margin="16,5"
+                        TextColor="Gray"
+                        HorizontalOptions="Start"
+                        FontSize="14"
+                        Text="{Binding LastRun}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </StackLayout>
+            
+            <!-- Total section -->
+            <StackLayout>
+                <Label
+                    Margin="16, 10, 16, 0"
+                    FontSize="16"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1, Android=1.25}"
+                    Text="Total balance"
+                    TextColor="DimGray"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <BoxView Color="Gray" VerticalOptions="Center" HeightRequest="1" BackgroundColor="DimGray"/>
+                <Grid
+                    BackgroundColor="Transparent"
+                    ColumnDefinitions="*"
+                    ColumnSpacing="5"
+                    RowSpacing="0"
+                    Padding="30, 0">
+                                
+                    <Label
+                        Grid.Column="0"
+                        Margin="16,5"
+                        TextColor="Gray"
+                        HorizontalOptions="Start"
+                        FontSize="14"
+                        Text="{Binding Balance.Total}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </StackLayout>
+            
+            <!-- Freeze section -->
+            <StackLayout>
+                <Label
+                    Margin="16, 10, 16, 0"
+                    FontSize="16"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1, Android=1.25}"
+                    Text="Freeze balance"
+                    TextColor="DimGray"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <BoxView Color="Gray" VerticalOptions="Center" HeightRequest="1" BackgroundColor="DimGray"/>
+                <Grid
+                    BackgroundColor="Transparent"
+                    ColumnDefinitions="*"
+                    ColumnSpacing="5"
+                    RowSpacing="0"
+                    Padding="30, 0">
+                                
+                    <Label
+                        Grid.Column="0"
+                        Margin="16,5"
+                        TextColor="Gray"
+                        HorizontalOptions="Start"
+                        FontSize="14"
+                        Text="{Binding Balance.Freeze}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </StackLayout>
+            
+            <!-- Free section -->
+            <StackLayout>
+                <Label
+                    Margin="16, 10, 16, 0"
+                    FontSize="16"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1, Android=1.25}"
+                    Text="Free balance"
+                    TextColor="DimGray"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center" />
+                <BoxView Color="Gray" VerticalOptions="Center" HeightRequest="1" BackgroundColor="DimGray"/>
+                <Grid
+                    BackgroundColor="Transparent"
+                    ColumnDefinitions="*"
+                    ColumnSpacing="5"
+                    RowSpacing="0"
+                    Padding="30, 0">
+                                
+                    <Label
+                        Grid.Column="0"
+                        Margin="16,5"
+                        TextColor="Gray"
+                        HorizontalOptions="Start"
+                        FontSize="14"
+                        Text="{Binding Balance.Free}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </StackLayout>
+            
+        </StackLayout>
         
-        <Button 
-            Text="Start Bot"
-            Command="{Binding SwitchCommand}"/>
+        <StackLayout VerticalOptions="EndAndExpand" >
+            <BoxView 
+                Margin="0,20"
+                Color="DimGray"
+                VerticalOptions="Center"
+                HeightRequest="1"
+                BackgroundColor="DimGray"/>
+            
+            <Label Text="Phone:"/>
+            <Entry 
+                Placeholder="Your Phone" x:Name="EntryPhoneNumber"
+                IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBoolConverter}}"
+                Text="{Binding PhoneNumber.Value}"/>
+                    
+            <Label Text="Password:"/>
+            <Entry
+                IsPassword="True"
+                IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBoolConverter}}"
+                Placeholder="Your Password" x:Name="EntryPassword"
+                Text="{Binding Password.Value}"/>
+            
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RememberPasswordCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <CheckBox HorizontalOptions="Start" VerticalOptions="Center" IsChecked="{Binding RememberPassword}"/>
+                <Label Text="Remember credentials" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+            </StackLayout>
+            
+            
+            <ActivityIndicator 
+                Color="DeepSkyBlue"
+                IsRunning="{Binding BotStarting}" 
+                IsVisible="{Binding BotStarting}" />
+            <Button 
+                Text="{Binding SwitchMessage}"
+                IsVisible="{Binding BotStarting, Converter={StaticResource InverseBoolConverter}}"
+                IsEnabled="{Binding SwitchEnabled}"
+                Command="{Binding SwitchCommand}"/>
+            
+        </StackLayout>
     </StackLayout>
 
 </ContentPage>

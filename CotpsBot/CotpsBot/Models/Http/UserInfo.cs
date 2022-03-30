@@ -35,7 +35,7 @@
         public int invite3Id {get; set;}
         public float total_one_profit {get; set;}
         public float one_profit {get; set;}
-        public int has_one_profit {get; set;}
+        public double has_one_profit {get; set;}
         public int total_two_profit {get; set;}
         public int two_profit {get; set;}
         public int has_two_profit {get; set;}
@@ -54,9 +54,9 @@
         public bool is_mobile_valid {get; set;}
         public string mobile {get; set;}
         public bool locked {get; set;}
-        public int balance {get; set;}
-        public int frozen_balance {get; set;}
-        public int freeze_balance {get; set;}
+        public double balance {get; set;}
+        public double frozen_balance {get; set;}
+        public double freeze_balance {get; set;}
         public int lixibao_freeze_balance {get; set;}
         public long createTime {get; set;}
         public int status {get; set;}

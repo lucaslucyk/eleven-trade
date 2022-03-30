@@ -4,5 +4,6 @@
              x:Class="CotpsBot.App">
     <Application.Resources>
 
+        <Style x:Key="HorizontalSeparatorStyle" TargetType="BoxView" />
     </Application.Resources>
 </Application>

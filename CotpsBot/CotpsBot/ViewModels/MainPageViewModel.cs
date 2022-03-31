@@ -46,7 +46,7 @@ namespace CotpsBot.ViewModels
             this.AddValidationRules();
             this.RecoveryFormData();
             
-            this._timer = new Timer(60000);
+            this._timer = new Timer(300000);
             this._timer.Elapsed += TimerElapsed;
             this._timer.AutoReset = true;
             

@@ -173,7 +173,7 @@ namespace CotpsBot.ViewModels
             SecureStorage.RemoveAll();
         }
 
-        private void InitializeProperties()
+        private async void InitializeProperties()
         {
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
@@ -183,6 +183,9 @@ namespace CotpsBot.ViewModels
             this.IsRunning = DependencyService.Get<IBotService>().GetStatus();
             this.SwitchMessage = this.IsRunning ? "BOT STOP" : "BOT START";
             this.LastRun = DependencyService.Get<IBotService>().GetLastRun();
+
+            if (this.IsRunning && this.SwitchEnabled)
+                this.Balance = await DependencyService.Get<IBotService>().GetBalance();
         }
 
         private bool AreFieldsValid()

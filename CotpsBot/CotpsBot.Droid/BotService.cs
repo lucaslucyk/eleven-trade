@@ -113,6 +113,12 @@ namespace CotpsBot.Droid
         {
             return this.LastRun;
         }
+
+        public async Task<TransactionsBalance> GetBalance()
+        {
+            return await _apiBot.LoginAndGetBalance();
+        }
+        
         public void Start()
         {
             Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(BotService));

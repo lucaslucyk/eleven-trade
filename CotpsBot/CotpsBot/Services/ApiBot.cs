@@ -106,6 +106,34 @@ namespace CotpsBot.Services
             // enable btn
             SendBtnControlStatus(true);
         }
+
+        public async Task<TransactionsBalance> LoginAndGetBalance()
+        {
+            var response = new TransactionsBalance();
+            var form = new LoginRequest
+            {
+                mobile = Settings.UserPhone,
+                password = Settings.UserPassword,
+                type = Settings.APILoginType
+            };
+            var loginResult = await ApiClient.LoginAsync(form);
+            if (!loginResult.success)
+            {
+                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
+                return response;
+            }
+            
+            // get data and return
+            var balance = await ApiClient.GetBalance();
+            response.Total = balance.userinfo.total_balance;
+            response.Freeze = balance.userinfo.freeze_balance;
+            response.Free = balance.userinfo.balance;
+            
+            // api logout
+            ApiClient.Logout();
+            
+            return response;
+        }
         
         #endregion
 

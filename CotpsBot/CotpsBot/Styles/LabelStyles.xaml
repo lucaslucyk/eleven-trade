@@ -3,11 +3,32 @@
     x:Class="CotpsBot.Styles.LabelStyles"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-
+    
+    <Style x:Key="BotStatusStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="30" />
+        <!-- <Setter Property="FontAttributes" Value="Bold" /> -->
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryWhite}" />
+        <Setter Property="FontFamily" Value="Montserrat-Bold" />
+        <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
+    </Style>
+    
+    <!--  Common style for Login Title labels  -->
+    <Style x:Key="LoginTitleLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryWhite}" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="FontFamily" Value="Montserrat-SemiBold" />
+        <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
+    </Style>
+    
     <!--  Common style for Title labels  -->
     <Style x:Key="TitleLabelStyle" TargetType="Label">
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="TextColor" Value="{DynamicResource Gray-900}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{DynamicResource TitleColor}" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Montserrat-SemiBold" />
@@ -17,10 +38,20 @@
     <!--  Common style for Description labels  -->
     <Style x:Key="DescriptionLabelStyle" TargetType="Label">
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextColor" Value="{DynamicResource Gray-700}" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryWhite}" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="Montserrat-Medium" />
+        <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
+    </Style>
+    
+    <!--  Common style for Description labels  -->
+    <Style x:Key="NumberDescriptionLabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryWhite}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="TitilliumWeb-SemiBold" />
         <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
     </Style>
 

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    x:Class="CotpsBot.Themes.BaseTheme"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:styles="clr-namespace:CotpsBot.Styles">
+    
+    <Color x:Key="PrimaryWhite">#FCFCFF</Color>
+    <Color x:Key="SecondaryWhite">#e8e8e8</Color>
+    <Color x:Key="PrimaryBackground">#110a0a</Color>
+    <Color x:Key="SecondaryBackground">#110a0a</Color>
+    <Color x:Key="PrimaryCyan">#4CCAC6</Color>
+    <Color x:Key="PrimaryGray">#666970</Color>
+    <Color x:Key="PrimaryBlue">#007AFF</Color>
+    <Color x:Key="TitleColor">#80888c</Color>
+    <Color x:Key="PrimaryGreen">#35d65e</Color>
+    <Color x:Key="PrimaryRed">#f45858</Color>
+    
+    <ResourceDictionary.MergedDictionaries>
+        <styles:Colors />
+        <styles:LabelStyles />
+        <styles:EntryStyles />
+    </ResourceDictionary.MergedDictionaries>
+    
+    
+</ResourceDictionary>

@@ -25,4 +25,36 @@
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Themes\BaseTheme.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Styles\LabelStyles.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Styles\Colors.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </EmbeddedResource>
+      <None Remove="Resources\Fonts\Montserrat-Bold.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-Bold.ttf" />
+      <None Remove="Resources\Fonts\Montserrat-Medium.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-Medium.ttf" />
+      <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+      <None Remove="Resources\Fonts\Montserrat-SemiBold.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-SemiBold.ttf" />
+      <None Remove="Resources\Fonts\TitilliumWeb-Bold.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\TitilliumWeb-Bold.ttf" />
+      <None Remove="Resources\Fonts\TitilliumWeb-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\TitilliumWeb-Regular.ttf" />
+      <None Remove="Resources\Fonts\TitilliumWeb-SemiBold.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\TitilliumWeb-SemiBold.ttf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\Images\logo_eleven_text.png">
+        <SubType>Designer</SubType>
+      </EmbeddedResource>
+    </ItemGroup>
 </Project>

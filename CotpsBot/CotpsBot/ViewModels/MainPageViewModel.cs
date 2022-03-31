@@ -19,19 +19,19 @@ namespace CotpsBot.ViewModels
     {
         #region Fields
         
-        private string taskMessage = "Stopped";
-        private string switchMessage = "Bot Start";
-        private bool switchEnabled = true;
-        private bool isRunning;
-        private bool botStarting;
-        private ValidatableObject<string> phoneNumber;
-        private ValidatableObject<string> password;
-        private DateTime lastRun;
-        private bool rememberPassword;
-        private TransactionsBalance balance;
+        private string _taskMessage = "Stopped";
+        private string _switchMessage = "Bot Start";
+        private bool _switchEnabled = true;
+        private bool _isRunning;
+        private bool _botStarting;
+        private ValidatableObject<string> _phoneNumber;
+        private ValidatableObject<string> _password;
+        private DateTime _lastRun;
+        private bool _rememberPassword;
+        private TransactionsBalance _balance;
         
-        private Timer timer;
-        public IRequestService ApiClient => DependencyService.Get<IRequestService>();
+        private readonly Timer _timer;
+        private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
 
         #endregion
         
@@ -46,9 +46,12 @@ namespace CotpsBot.ViewModels
             this.AddValidationRules();
             this.RecoveryFormData();
             
-            this.timer = new Timer(60000);
-            this.timer.Elapsed += TimerElapsed;
-            this.timer.AutoReset = true;
+            this._timer = new Timer(60000);
+            this._timer.Elapsed += TimerElapsed;
+            this._timer.AutoReset = true;
+            
+            // try to start
+            this.TryToStart();
         }
 
         #endregion
@@ -57,58 +60,58 @@ namespace CotpsBot.ViewModels
         
         public string SwitchMessage
         {
-            get => this.switchMessage;
-            set => this.SetProperty(ref this.switchMessage, value);
+            get => this._switchMessage;
+            set => this.SetProperty(ref this._switchMessage, value);
         }
         public bool SwitchEnabled
         {
-            get { return this.switchEnabled; }
-            set { this.SetProperty(ref this.switchEnabled, value); }
+            get => this._switchEnabled;
+            set => this.SetProperty(ref this._switchEnabled, value);
         }
         public bool RememberPassword
         {
-            get { return this.rememberPassword; }
-            set { this.SetProperty(ref this.rememberPassword, value); }
+            get => this._rememberPassword;
+            set => this.SetProperty(ref this._rememberPassword, value);
         }
         
         public TransactionsBalance Balance
         {
-            get => this.balance;
-            set => this.SetProperty(ref this.balance, value);
+            get => this._balance;
+            private set => this.SetProperty(ref this._balance, value);
         }
         public DateTime LastRun
         {
-            get => this.lastRun;
-            set => this.SetProperty(ref this.lastRun, value);
+            get => this._lastRun;
+            set => this.SetProperty(ref this._lastRun, value);
         }
         
         public bool IsRunning
         {
-            get => this.isRunning;
-            set => this.SetProperty(ref this.isRunning, value);
+            get => this._isRunning;
+            set => this.SetProperty(ref this._isRunning, value);
         }
         
         public bool BotStarting
         {
-            get => this.botStarting;
-            set => this.SetProperty(ref this.botStarting, value);
+            get => this._botStarting;
+            set => this.SetProperty(ref this._botStarting, value);
         }
 
         public string TaskMessage
         {
-            get => this.taskMessage;
-            set => this.SetProperty(ref this.taskMessage, value);
+            get => this._taskMessage;
+            set => this.SetProperty(ref this._taskMessage, value);
         }
         
         public ValidatableObject<string> PhoneNumber
         {
-            get { return this.phoneNumber; }
-            set { this.SetProperty(ref this.phoneNumber, value); }
+            get => this._phoneNumber;
+            private set => this.SetProperty(ref this._phoneNumber, value);
         }
         public ValidatableObject<string> Password
         {
-            get { return this.password; }
-            set { this.SetProperty(ref this.password, value); }
+            get => this._password;
+            private set => this.SetProperty(ref this._password, value);
         }
 
         #endregion
@@ -131,17 +134,23 @@ namespace CotpsBot.ViewModels
         {
             this.RememberPassword = !this.RememberPassword;
             if (!this.RememberPassword)
-                this.RemoveFormData();
+                RemoveFormData();
         }
 
+        private async void TryToStart()
+        {
+            if (this.AreFieldsValid())
+                await BotStart();
+        }
         private async Task BotStart()
         {
-            await this.CotpsOperate();
-            this.timer.Start();
+            await this.CotpsOperate(true);
+            if (this.IsRunning)
+                this._timer.Start();
         }
         private void BotStop()
         {
-            this.timer.Stop();
+            this._timer.Stop();
             this.IsRunning = false;
             this.TaskMessage = "Stopped";
             this.SwitchMessage = "Bot Start";
@@ -171,17 +180,17 @@ namespace CotpsBot.ViewModels
         }
         private async void RecoveryFormData()
         {
-            var _phoneNumber = await SecureStorage.GetAsync("phoneNumber");
-            var _password = await SecureStorage.GetAsync("password");
-            var _rememberPwd = await SecureStorage.GetAsync("rememberPwd");
+            var phoneNumber = await SecureStorage.GetAsync("phoneNumber");
+            var password = await SecureStorage.GetAsync("password");
+            var rememberPwd = await SecureStorage.GetAsync("rememberPwd");
 
-            if (!String.IsNullOrEmpty(_rememberPwd))
+            if (!String.IsNullOrEmpty(rememberPwd))
             {
-                this.PhoneNumber.Value = _phoneNumber == null ? "" : _phoneNumber;
-                this.Password.Value = _password == null ? "" : _password;
+                this.PhoneNumber.Value = phoneNumber == null ? "" : phoneNumber;
+                this.Password.Value = password == null ? "" : password;
             }
 
-            this.RememberPassword = !String.IsNullOrEmpty(_rememberPwd);
+            this.RememberPassword = !String.IsNullOrEmpty(rememberPwd);
         }
         private async Task SaveFormData()
         {
@@ -191,7 +200,7 @@ namespace CotpsBot.ViewModels
             await SecureStorage.SetAsync("rememberPwd", this.RememberPassword ? "1" : "");
         }
         
-        private void RemoveFormData()
+        private static void RemoveFormData()
         {
             SecureStorage.RemoveAll();
         }
@@ -243,7 +252,7 @@ namespace CotpsBot.ViewModels
             this.TaskMessage = "Running! :)";
         }
         
-        private async Task CotpsOperate()
+        private async Task CotpsOperate(bool starting = false)
         {
             try
             {
@@ -271,12 +280,20 @@ namespace CotpsBot.ViewModels
                 }
                 else
                 {
-                    this.IsRunning = true;
+                    
                     this.TaskMessage = "COTPS Login error.";
                     this.SwitchMessage = "Bot Stop";
                     this.LastRun = DateTime.Now;
                     await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
-                    // this.BotStop();
+                    if (starting)
+                    {
+                        this.IsRunning = false;
+                        this.BotStop();
+                    }
+                    else
+                    {
+                        this.IsRunning = true;
+                    }
                 }
 
             }
@@ -297,11 +314,11 @@ namespace CotpsBot.ViewModels
             this.Password = new ValidatableObject<string>();
             this.Balance = new TransactionsBalance();
         }
-        
-        public bool AreFieldsValid()
+
+        private bool AreFieldsValid()
         {
-            bool isPhoneNumberValid = this.PhoneNumber.Validate();
-            bool isPasswordValid = this.Password.Validate();
+            var isPhoneNumberValid = this.PhoneNumber.Validate();
+            var isPasswordValid = this.Password.Validate();
             return isPhoneNumberValid && isPasswordValid;
         }
         

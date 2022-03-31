@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    x:Class="CotpsBot.Styles.EntryStyles"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Common style for borderless entries -->
+    <Style x:Key="BorderlessEntryStyle" TargetType="Entry">
+        <Setter Property="FontFamily" Value="Montserrat-Regular" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource PrimaryGray}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource SecondaryWhite}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="ReturnType" Value="Done" />
+    </Style>
+    
+</ResourceDictionary>

@@ -108,6 +108,11 @@ namespace CotpsBot.Droid
         {
             return this.IsRunning;
         }
+
+        public DateTime GetLastRun()
+        {
+            return this.LastRun;
+        }
         public void Start()
         {
             Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(BotService));

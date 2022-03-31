@@ -182,6 +182,7 @@ namespace CotpsBot.ViewModels
             // start data when open
             this.IsRunning = DependencyService.Get<IBotService>().GetStatus();
             this.SwitchMessage = this.IsRunning ? "BOT STOP" : "BOT START";
+            this.LastRun = DependencyService.Get<IBotService>().GetLastRun();
         }
 
         private bool AreFieldsValid()

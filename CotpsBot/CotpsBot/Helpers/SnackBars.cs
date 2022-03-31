@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.UI.Views.Options;
 using Xamarin.Forms;
 
 
-namespace OutsideWorks.Helpers
+namespace CotpsBot.Helpers
 {
     public class SuccessSnackBar: SnackBarOptions
     {

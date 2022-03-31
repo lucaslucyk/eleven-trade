@@ -53,6 +53,7 @@
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BotService.cs" />
         <Compile Include="MainActivity.cs" />
         <Compile Include="Resources\Resource.Designer.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

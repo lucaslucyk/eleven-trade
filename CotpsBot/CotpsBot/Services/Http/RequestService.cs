@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using CotpsBot.Exceptions;
 using CotpsBot.Models.Http;
 using Newtonsoft.Json;
-using OutsideWorks.Helpers;
+using CotpsBot.Helpers;
 using Xamarin.Essentials;
 
 namespace CotpsBot.Services.Http

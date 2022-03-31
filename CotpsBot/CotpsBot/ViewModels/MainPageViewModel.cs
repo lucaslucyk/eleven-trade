@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Timers;
 using CotpsBot.Models;
-using CotpsBot.Models.Http;
-using CotpsBot.Services.Http;
+using CotpsBot.Services;
 using CotpsBot.Validators;
 using CotpsBot.Validators.Rules;
-using OutsideWorks.Helpers;
-using Xamarin.CommunityToolkit.Extensions;
+using CotpsBot.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Timer = System.Timers.Timer;
+
 
 namespace CotpsBot.ViewModels
 {
@@ -29,9 +25,6 @@ namespace CotpsBot.ViewModels
         private DateTime _lastRun;
         private bool _rememberPassword;
         private TransactionsBalance _balance;
-        
-        private readonly Timer _timer;
-        private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
 
         #endregion
         
@@ -45,13 +38,8 @@ namespace CotpsBot.ViewModels
             this.InitializeProperties();
             this.AddValidationRules();
             this.RecoveryFormData();
-            
-            this._timer = new Timer(300000);
-            this._timer.Elapsed += TimerElapsed;
-            this._timer.AutoReset = true;
-            
-            // try to start
-            this.TryToStart();
+
+            HandleReceivedMessages();
         }
 
         #endregion
@@ -124,57 +112,38 @@ namespace CotpsBot.ViewModels
         #endregion
 
         #region Methods
-        
-        private async void TimerElapsed(object source, ElapsedEventArgs e)
-        {
-            await this.CotpsOperate();
-        }
-        
+
         private async void RememberTapped(object obj)
         {
             this.RememberPassword = !this.RememberPassword;
             if (!this.RememberPassword)
                 RemoveFormData();
         }
-
-        private async void TryToStart()
-        {
-            if (this.AreFieldsValid())
-                await BotStart();
-        }
-        private async Task BotStart()
-        {
-            await this.CotpsOperate(true);
-            if (this.IsRunning)
-                this._timer.Start();
-        }
-        private void BotStop()
-        {
-            this._timer.Stop();
-            this.IsRunning = false;
-            this.TaskMessage = "Stopped";
-            this.SwitchMessage = "Bot Start";
-        }
+        
         public async void SwitchClicked(object obj)
         {
+            if (!this.AreFieldsValid())
+                return;
+            
             this.BotStarting = true;
-            if (this.AreFieldsValid())
-            {
-                if (this.RememberPassword)
-                    await this.SaveFormData();
+            
+            // save credentials in settings for api service
+            Settings.UserPhone = this.PhoneNumber.Value;
+            Settings.UserPassword = this.Password.Value;
+            
+            // store credentials
+            if (this.RememberPassword)
+                await this.SaveFormData();
 
-                if (!this.IsRunning)
-                {
-                    await this.BotStart();
-                }
-                else
-                {
-                    this.BotStop();
-                }
+            if (!DependencyService.Get<IBotService>().GetStatus())
+            {
+                DependencyService.Get<IBotService>().Start();
+                // this.SwitchMessage = "BOT STOP";
             }
             else
             {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Check your credentials."));
+                DependencyService.Get<IBotService>().Stop();
+                // this.SwitchMessage = "BOT START";
             }
             this.BotStarting = false;
         }
@@ -196,7 +165,6 @@ namespace CotpsBot.ViewModels
         {
             await SecureStorage.SetAsync("phoneNumber", this.PhoneNumber.Value);
             await SecureStorage.SetAsync("password", this.Password.Value);
-            
             await SecureStorage.SetAsync("rememberPwd", this.RememberPassword ? "1" : "");
         }
         
@@ -205,114 +173,15 @@ namespace CotpsBot.ViewModels
             SecureStorage.RemoveAll();
         }
 
-        private void UpdateBalance(BalanceInfo data)
-        {
-            this.Balance.Total = data.total_balance;
-            this.Balance.Freeze = data.freeze_balance;
-            this.Balance.Free = data.balance;
-            
-            OnPropertyChanged("Balance");
-        }
-
-        private async Task Operate()
-        {
-            this.TaskMessage = "Creating order...";
-            var order = await ApiClient.CreateOrder();
-            if (order.success)
-            {
-                this.TaskMessage = $"Confirming order {order.data.orderId}...";
-                var confirm = await ApiClient.ConfirmOrder(order.data.orderId);
-
-                if (confirm.success)
-                {
-                    await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar("Order confirmed succesfully."));
-                    await DoTransactions();
-                }
-                else
-                {
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(confirm.msg));
-                }
-            }
-        }
-
-        private async Task DoTransactions()
-        {
-            var balanceResponse = await ApiClient.GetBalance();
-            if (balanceResponse.success)
-            {
-                UpdateBalance(balanceResponse.userinfo);
-
-                var converted = Convert.ToDouble(balanceResponse.userinfo.balance);
-                if (converted >= 5.0)
-                {
-                    await Operate();
-                }
-            }
-
-            this.TaskMessage = "Running! :)";
-        }
-        
-        private async Task CotpsOperate(bool starting = false)
-        {
-            try
-            {
-                this.SwitchEnabled = false;
-                this.TaskMessage = "Logging into COTPS...";
-                var form = new LoginRequest
-                {
-                    mobile = this.PhoneNumber.Value,
-                    password = this.Password.Value,
-                    type = Settings.APILoginType
-                };
-                var loginResult = await ApiClient.LoginAsync(form);
-                if (loginResult.success)
-                {
-                    this.IsRunning = true;
-                    this.TaskMessage = "Running! :)";
-                    this.SwitchMessage = "Bot Stop";
-                    this.LastRun = DateTime.Now;
-                    
-                    // try to create and confirm orders
-                    await this.DoTransactions();
-                    
-                    // logout after of do actions
-                    ApiClient.Logout();
-                }
-                else
-                {
-                    
-                    this.TaskMessage = "COTPS Login error.";
-                    this.SwitchMessage = "Bot Stop";
-                    this.LastRun = DateTime.Now;
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
-                    if (starting)
-                    {
-                        this.IsRunning = false;
-                        this.BotStop();
-                    }
-                    else
-                    {
-                        this.IsRunning = true;
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            finally
-            {
-                this.SwitchEnabled = true;
-            }
-        }
-        
         private void InitializeProperties()
         {
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
             this.Balance = new TransactionsBalance();
+            
+            // start data when open
+            this.IsRunning = DependencyService.Get<IBotService>().GetStatus();
+            this.SwitchMessage = this.IsRunning ? "BOT STOP" : "BOT START";
         }
 
         private bool AreFieldsValid()
@@ -326,6 +195,35 @@ namespace CotpsBot.ViewModels
         {
             this.PhoneNumber.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "Phone number Required" });
             this.Password.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "Password Required" });
+        }
+
+        void HandleReceivedMessages()
+        {
+            MessagingCenter.Subscribe<ServiceMessage>(this, "ServiceMessage", message =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.IsRunning = message.IsRunning;
+                    this.LastRun = message.LastRun;
+                    this.SwitchMessage = message.IsRunning ? "BOT STOP" : "BOT START";
+                });
+            });
+            
+            MessagingCenter.Subscribe<TransactionsBalance>(this, "TransactionsBalance", message =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.Balance = message;
+                });
+            });
+            
+            MessagingCenter.Subscribe<BtnControlMessage>(this, "BtnControlMessage", message =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.SwitchEnabled = message.Status;
+                });
+            });
         }
         
         #endregion

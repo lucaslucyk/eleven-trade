@@ -68,12 +68,16 @@ namespace CotpsBot.ViewModels
         {
             var _prev = IsNotConnected;
             IsNotConnected = e.NetworkAccess != NetworkAccess.Internet;
-            
+
             if (e.NetworkAccess != NetworkAccess.Internet && !_prev)
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Lost Internet Connection. Switching to Offline mode"));
+            {
+                // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Lost Internet Connection. Switching to Offline mode"));
+            }
 
             if (e.NetworkAccess == NetworkAccess.Internet && _prev)
-                await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar("Internet connection established. Switching to online mode."));
+            {
+                // await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar("Internet connection established. Switching to online mode."));
+            }
 
         }
         

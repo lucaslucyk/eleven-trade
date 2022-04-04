@@ -13,7 +13,28 @@ namespace CotpsBot.Services
     {
         #region Fields
 
+
         private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
+
+        #endregion
+
+        #region Constructor
+
+        public ApiBot()
+        {
+            UserPhone = Settings.UserPhone;
+            UserPassword = Settings.UserPassword;
+            LoginType = Settings.APILoginType;
+        }
+
+        #endregion
+
+        #region Properties
+
+        private string UserPhone { get; set; }
+        private string UserPassword { get; set; }
+        private string LoginType { get; set; }
+        
 
         #endregion
 
@@ -42,12 +63,14 @@ namespace CotpsBot.Services
 
                 if (confirm.success)
                 {
-                    await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar("Order confirmed succesfully."));
+                    // TODO: Notify this ?
+                    // await App.Current.MainPage.CotpsBotkBarAsync(new SuccessSnackBar("Order confirmed succesfully."));
                     await DoTransactions();
                 }
                 else
                 {
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(confirm.msg));
+                    // TODO: Notify this
+                    // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(confirm.msg));
                 }
             }
         }
@@ -82,9 +105,9 @@ namespace CotpsBot.Services
             
             var form = new LoginRequest
             {
-                mobile = Settings.UserPhone,
-                password = Settings.UserPassword,
-                type = Settings.APILoginType
+                mobile = this.UserPhone,
+                password = this.UserPassword,
+                type = this.LoginType
             };
             var loginResult = await ApiClient.LoginAsync(form);
             
@@ -98,7 +121,8 @@ namespace CotpsBot.Services
             }
             else
             {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
+                // TODO: Notify this
+                // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
                 if (starting)
                     DependencyService.Get<IBotService>().Stop();
             }
@@ -112,14 +136,15 @@ namespace CotpsBot.Services
             var response = new TransactionsBalance();
             var form = new LoginRequest
             {
-                mobile = Settings.UserPhone,
-                password = Settings.UserPassword,
-                type = Settings.APILoginType
+                mobile = this.UserPhone,
+                password = this.UserPassword,
+                type = this.LoginType
             };
             var loginResult = await ApiClient.LoginAsync(form);
             if (!loginResult.success)
             {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
+                // TODO: Notify this
+                // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
                 return response;
             }
             

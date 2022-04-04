@@ -67,7 +67,7 @@ namespace CotpsBot.Droid
             manager.CreateNotificationChannel(channel);
             Notification notification = new Notification.Builder(this, "ServiceChannel")
                 .SetContentTitle("COTPS Service working")
-                .SetSmallIcon(Resource.Drawable.abc_star_black_48dp)
+                .SetSmallIcon(Resource.Drawable.eleven_trade_icon_small)
                 .SetOngoing(true)
                 .Build();
 

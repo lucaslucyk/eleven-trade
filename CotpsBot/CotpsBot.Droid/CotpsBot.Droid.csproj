@@ -69,6 +69,12 @@
           <Generator>MSBuild:UpdateGeneratedFiles</Generator>
         </AndroidResource>
         <AndroidResource Include="Resources\drawable\by_elede_sm.png" />
+        <AndroidResource Include="Resources\drawable\eleven_trade_icon_small.png">
+          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
+        <AndroidResource Include="Resources\drawable\icon_old.png">
+          <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+        </AndroidResource>
         <AndroidResource Include="Resources\drawable\icon.png">
           <Generator>MSBuild:UpdateGeneratedFiles</Generator>
         </AndroidResource>

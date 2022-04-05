@@ -5,6 +5,7 @@ using CotpsBot.Services.Http;
 using CotpsBot.Helpers;
 using CotpsBot.Models;
 using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace CotpsBot.Services
@@ -12,8 +13,7 @@ namespace CotpsBot.Services
     public class ApiBot
     {
         #region Fields
-
-
+        
         private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
 
         #endregion
@@ -22,23 +22,33 @@ namespace CotpsBot.Services
 
         public ApiBot()
         {
-            UserPhone = Settings.UserPhone;
-            UserPassword = Settings.UserPassword;
-            LoginType = Settings.APILoginType;
+            // UserPhone = Settings.UserPhone;
+            // UserPassword = Settings.UserPassword;
+            // LoginType = Settings.APILoginType;
         }
 
         #endregion
 
         #region Properties
 
-        private string UserPhone { get; set; }
-        private string UserPassword { get; set; }
-        private string LoginType { get; set; }
+        // private string UserPhone { get; set; }
+        // private string UserPassword { get; set; }
+        // private string LoginType { get; set; }
         
 
         #endregion
 
         #region Methods
+
+        private async Task<LoginRequest> GetLoginForm()
+        {
+            return new LoginRequest
+            {
+                mobile = Settings.UserPhone,
+                password = Settings.UserPassword,
+                type = Settings.APILoginType
+            };
+        }
 
         private void SendTransactionMessage(BalanceInfo data)
         {
@@ -102,13 +112,8 @@ namespace CotpsBot.Services
         {
             // disable btn
             SendBtnControlStatus(false);
-            
-            var form = new LoginRequest
-            {
-                mobile = this.UserPhone,
-                password = this.UserPassword,
-                type = this.LoginType
-            };
+
+            var form = await GetLoginForm();
             var loginResult = await ApiClient.LoginAsync(form);
             
             if (loginResult.success)
@@ -134,12 +139,7 @@ namespace CotpsBot.Services
         public async Task<TransactionsBalance> LoginAndGetBalance()
         {
             var response = new TransactionsBalance();
-            var form = new LoginRequest
-            {
-                mobile = this.UserPhone,
-                password = this.UserPassword,
-                type = this.LoginType
-            };
+            var form = await GetLoginForm();
             var loginResult = await ApiClient.LoginAsync(form);
             if (!loginResult.success)
             {

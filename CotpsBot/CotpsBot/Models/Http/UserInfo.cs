@@ -24,27 +24,27 @@
         public int deal_num {get; set;}
         public long deal_time {get; set;}
         public double deal_profit {get; set;}
-        public int fee {get; set;}
-        public int in_fee {get; set;}
+        public double fee {get; set;}
+        public double in_fee {get; set;}
         public int del_address_count {get; set;}
         public int lixibao_profit {get; set;}
-        public int recharge {get; set;}
+        public double recharge {get; set;}
         public int get_money {get; set;}
         public int inviteId {get; set;}
         public int invite2Id {get; set;}
         public int invite3Id {get; set;}
-        public float total_one_profit {get; set;}
-        public float one_profit {get; set;}
+        public double total_one_profit {get; set;}
+        public double one_profit {get; set;}
         public double has_one_profit {get; set;}
-        public int total_two_profit {get; set;}
-        public int two_profit {get; set;}
-        public int has_two_profit {get; set;}
-        public int total_three_profit {get; set;}
-        public int three_profit {get; set;}
-        public int has_three_profit {get; set;}
-        public int total_four_profit {get; set;}
-        public int four_profit {get; set;}
-        public int has_four_profit {get; set;}
+        public double total_two_profit {get; set;}
+        public double two_profit {get; set;}
+        public double has_two_profit {get; set;}
+        public double total_three_profit {get; set;}
+        public double three_profit {get; set;}
+        public double has_three_profit {get; set;}
+        public double total_four_profit {get; set;}
+        public double four_profit {get; set;}
+        public double has_four_profit {get; set;}
         public string avatar {get; set;}
         public string trans_password {get; set;}
         public string in_balance {get; set;}

@@ -119,7 +119,7 @@ namespace CotpsBot.ViewModels
 
         #region Methods
 
-        private async void RememberTapped(object obj)
+        private void RememberTapped(object obj)
         {
             this.RememberPassword = !this.RememberPassword;
             if (!this.RememberPassword)
@@ -128,7 +128,8 @@ namespace CotpsBot.ViewModels
 
         public async void SwitchClicked(object obj)
         {
-            if (!this.AreFieldsValid())
+            var svcRunning = DependencyService.Get<IBotService>().GetStatus();
+            if (!this.AreFieldsValid() && !svcRunning)
             {
                 await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Phone and password required."));
                 return;
@@ -137,14 +138,17 @@ namespace CotpsBot.ViewModels
             this.BotStarting = true;
 
             // save credentials in settings for api service
-            Settings.UserPhone = this.PhoneNumber.Value;
-            Settings.UserPassword = this.Password.Value;
+            if (!svcRunning)
+            {
+                Settings.UserPhone = this.PhoneNumber.Value;
+                Settings.UserPassword = this.Password.Value;
 
-            // store credentials
-            if (this.RememberPassword)
-                await this.SaveFormData();
-
-            if (!DependencyService.Get<IBotService>().GetStatus())
+                // store credentials
+                if (this.RememberPassword)
+                    await this.SaveFormData();
+            }
+            
+            if (!svcRunning)
             {
                 DependencyService.Get<IBotService>().Start();
                 // this.SwitchMessage = "BOT STOP";
@@ -154,8 +158,10 @@ namespace CotpsBot.ViewModels
                 DependencyService.Get<IBotService>().Stop();
                 // this.SwitchMessage = "BOT START";
             }
-
-            await this.RefreshScreenData();
+            
+            if (DependencyService.Get<IBotService>().GetStatus())
+                await this.RefreshScreenData();
+            
             this.BotStarting = false;
         }
 

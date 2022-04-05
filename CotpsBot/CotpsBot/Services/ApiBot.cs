@@ -4,6 +4,7 @@ using CotpsBot.Models.Http;
 using CotpsBot.Services.Http;
 using CotpsBot.Helpers;
 using CotpsBot.Models;
+using Plugin.LocalNotification;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -39,6 +40,22 @@ namespace CotpsBot.Services
         #endregion
 
         #region Methods
+
+        private async Task NotifyMessage(string title, string message, string data = "", int id = 1337)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var notification = new NotificationRequest
+                {
+                    BadgeNumber = 1,
+                    Description = message,
+                    Title = title,
+                    ReturningData = data,
+                    NotificationId = id
+                };
+                await NotificationCenter.Current.Show(notification);
+            });
+        }
 
         private async Task<LoginRequest> GetLoginForm()
         {
@@ -79,8 +96,8 @@ namespace CotpsBot.Services
                 }
                 else
                 {
-                    // TODO: Notify this
-                    // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(confirm.msg));
+                    await NotifyMessage("COTPS Order confirm error", $"Error confirming order {order.data.orderId}.");
+                    // DependencyService.Get<IBotService>().Stop();
                 }
             }
         }
@@ -110,6 +127,14 @@ namespace CotpsBot.Services
         }
         public async Task LoginAndOperate(bool starting = false)
         {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                // wait for internet connection - do nothing
+                await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
+                    id: 1338);
+                return;
+            }
+            
             // disable btn
             SendBtnControlStatus(false);
 
@@ -126,9 +151,8 @@ namespace CotpsBot.Services
             }
             else
             {
-                // TODO: Notify this
-                // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
-                if (starting)
+                await NotifyMessage("COTPS Login error", "Check your credentials and restart bot service.");
+                if (loginResult.code == 411)
                     DependencyService.Get<IBotService>().Stop();
             }
             
@@ -139,12 +163,21 @@ namespace CotpsBot.Services
         public async Task<TransactionsBalance> LoginAndGetBalance()
         {
             var response = new TransactionsBalance();
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                // wait for internet connection - do nothing
+                await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
+                    id: 1338);
+                return response;
+            }
+            
             var form = await GetLoginForm();
             var loginResult = await ApiClient.LoginAsync(form);
             if (!loginResult.success)
             {
-                // TODO: Notify this
-                // await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("COTPS login error."));
+                await NotifyMessage("COTPS Login error", "Check your credentials and restart bot service.");
+                if (loginResult.code == 411)
+                    DependencyService.Get<IBotService>().Stop();
                 return response;
             }
             

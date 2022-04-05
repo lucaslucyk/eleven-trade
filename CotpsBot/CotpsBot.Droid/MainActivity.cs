@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.LocalNotification;
 
 namespace CotpsBot.Droid
 {
@@ -20,6 +21,9 @@ namespace CotpsBot.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            NotificationCenter.CreateNotificationChannel();
+            
+            
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

@@ -8,6 +8,7 @@ using Android.Runtime;
 using CotpsBot.Helpers;
 using CotpsBot.Models;
 using CotpsBot.Services;
+using Plugin.LocalNotification;
 using Xamarin.Forms;
 
 [assembly:Xamarin.Forms.Dependency(typeof(CotpsBot.Droid.BotService))]
@@ -89,19 +90,40 @@ namespace CotpsBot.Droid
 
         private async void MainLoop()
         {
-            while (this.IsRunning)
+            try
             {
-                if ((DateTime.Now - LastRun).TotalSeconds > Settings.ServiceInterval)
+                while (this.IsRunning)
                 {
-                    this.LastRun = DateTime.Now;
-                    await _apiBot.LoginAndOperate();
-                    SendServiceMessage();
+                    if ((DateTime.Now - LastRun).TotalSeconds > Settings.ServiceInterval)
+                    {
+                        this.LastRun = DateTime.Now;
+                        await _apiBot.LoginAndOperate();
+                        SendServiceMessage();
+                    }
+                    await Task.Delay(1000);
                 }
-                await Task.Delay(1000);
+                
+                // send stop data
+                SendServiceMessage();
             }
-            
-            // send stop data
-            SendServiceMessage();
+            catch (Exception e)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var notification = new NotificationRequest
+                    {
+                        BadgeNumber = 1,
+                        Description = $"{e.Message} - Restarting service...",
+                        Title = "COTPS Service error",
+                        ReturningData = "COTS Service Error",
+                        NotificationId = 1336
+                    };
+                    await NotificationCenter.Current.Show(notification);
+                });
+                
+                Stop();
+                Start();
+            }
         }
 
         public bool GetStatus()

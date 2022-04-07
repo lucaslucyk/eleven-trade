@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Plugin.InAppBilling" Version="6.3.2-beta" />
         <PackageReference Include="Plugin.LocalNotification" Version="9.2.0" />
         <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
         <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />

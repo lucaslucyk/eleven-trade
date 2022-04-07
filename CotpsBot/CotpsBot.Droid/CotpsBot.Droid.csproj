@@ -39,6 +39,7 @@
         <AndroidManagedSymbols>true</AndroidManagedSymbols>
         <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
         <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+        <AndroidPackageFormat>aab</AndroidPackageFormat>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />
@@ -49,8 +50,10 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Plugin.InAppBilling" Version="6.3.2-beta" />
         <PackageReference Include="Plugin.LocalNotification" Version="9.2.0" />
         <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
+        <PackageReference Include="Xamarin.Android.Google.BillingClient" Version="4.0.0" />
         <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />
         <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
         <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />

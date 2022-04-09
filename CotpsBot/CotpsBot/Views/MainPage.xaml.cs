@@ -19,10 +19,8 @@ namespace CotpsBot.Views
             InitializeComponent();
         }
 
-        protected override async void OnAppearing()
+        private async Task CheckOrBuy()
         {
-            base.OnAppearing();
-
             if (CrossInAppBilling.IsSupported)
             {
                 var billing = CrossInAppBilling.Current;
@@ -44,12 +42,8 @@ namespace CotpsBot.Views
                             {
                                 try
                                 {
-                                    var purchase = await billing.PurchaseAsync(inAppBillingProducts.First().ProductId, ItemType.Subscription);
-                                    if (!purchase.IsAcknowledged)
-                                    {
-                                        
-                                    }
-
+                                    var purchase = await billing.PurchaseAsync("cotps_service", ItemType.Subscription);
+                                    
                                 }
                                 catch (InAppBillingPurchaseException e)
                                 {
@@ -62,14 +56,25 @@ namespace CotpsBot.Views
                 }
                 catch (Exception e)
                 {
+#if DEBUG
                     Console.WriteLine(e);
                     throw;
+#else
+                    App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(e.ToString()));
+#endif
                 }
                 finally
                 {
                     await billing.DisconnectAsync();
                 }
             }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+        
+            // await this.CheckOrBuy();
         }
     }
 }

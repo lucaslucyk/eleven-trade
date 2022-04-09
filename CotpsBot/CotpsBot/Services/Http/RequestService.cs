@@ -78,9 +78,12 @@ namespace CotpsBot.Services.Http
             if (catchToken && response.IsSuccessStatusCode)
             {
                 response.Headers.TryGetValues("Authorization", out var tokens);
-                var tokenList = tokens.ToList();
-                if (tokenList.Any())
-                    SetToken(tokenList.First());
+                if (tokens != null)
+                {
+                    var tokenList = tokens.ToList();
+                    if (tokenList.Any())
+                        SetToken(tokenList.First());
+                }
             }
             
             

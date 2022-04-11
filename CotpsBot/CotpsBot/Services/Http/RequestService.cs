@@ -35,7 +35,7 @@ namespace CotpsBot.Services.Http
             catch
             {
                 // ignored
-                Debug.WriteLine("Can't create API Client.");
+                // Debug.WriteLine("Can't create API Client.");
             }
         }
 

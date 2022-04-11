@@ -29,11 +29,16 @@
         <AndroidLinkMode>None</AndroidLinkMode>
         <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <AndroidKeyStore>true</AndroidKeyStore>
+        <AndroidSigningKeyStore>C:\Signatures\GoogleSignature\GoogleSignature.keystore</AndroidSigningKeyStore>
+        <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
+        <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
+        <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
         <DebugType>pdbonly</DebugType>
-        <Optimize>false</Optimize>
+        <Optimize>true</Optimize>
         <OutputPath>bin\Release</OutputPath>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -41,6 +46,11 @@
         <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
         <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
         <AndroidPackageFormat>aab</AndroidPackageFormat>
+        <AndroidKeyStore>true</AndroidKeyStore>
+        <AndroidSigningKeyStore>C:\Signatures\GoogleSignature\GoogleSignature.keystore</AndroidSigningKeyStore>
+        <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
+        <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
+        <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />

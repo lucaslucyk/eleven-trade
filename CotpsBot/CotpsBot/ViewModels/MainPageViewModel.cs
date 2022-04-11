@@ -27,6 +27,7 @@ namespace CotpsBot.ViewModels
         private DateTime _lastRun;
         private bool _rememberPassword;
         private TransactionsBalance _balance;
+        private static IBillingService BillingHandler => DependencyService.Get<IBillingService>();
 
         #endregion
 
@@ -126,16 +127,68 @@ namespace CotpsBot.ViewModels
                 RemoveFormData();
         }
 
+        private async Task<bool> EnsureSuscribtion()
+        {
+            try
+            {
+                await BillingHandler.Connect();
+                if (BillingHandler.IsConnected)
+                {
+                    if (!await BillingHandler.CheckBuy())
+                    {
+                        var result = await BillingHandler.Purchase();
+                        if (result.Ok)
+                        {
+                            await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar(result.Message));
+                            // suscribed from now
+                            return true;
+                        }
+                        else
+                        {
+                            await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(result.Message));
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // subscribed
+                        return true;
+                    }
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Billing service not available."));
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("An error occurred while trying to buy the COTPS service."));
+                return false;
+            }
+            finally
+            {
+                await BillingHandler.Disconnect();
+            }
+        }
+
         public async void SwitchClicked(object obj)
         {
+            this.BotStarting = true;
+
+            if (!await this.EnsureSuscribtion())
+            {
+                this.BotStarting = false;
+                return;
+            }
+            
             var svcRunning = DependencyService.Get<IBotService>().GetStatus();
             if (!this.AreFieldsValid() && !svcRunning)
             {
                 await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Phone and password required."));
+                this.BotStarting = false;
                 return;
             }
-
-            this.BotStarting = true;
 
             // save credentials in settings for api service
             if (!svcRunning)

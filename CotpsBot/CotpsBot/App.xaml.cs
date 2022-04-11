@@ -1,4 +1,5 @@
 ﻿using System;
+using CotpsBot.Services;
 using CotpsBot.Services.Http;
 using CotpsBot.Views;
 using Xamarin.Forms;
@@ -19,6 +20,7 @@ namespace CotpsBot
         #region Fields
 
         public static RequestService ApiClient;
+        public static BillingService BillingHandler;
 
         #endregion
         public App()
@@ -27,6 +29,9 @@ namespace CotpsBot
 
             ApiClient = new RequestService();
             DependencyService.RegisterSingleton<IRequestService>(ApiClient);
+
+            BillingHandler = new BillingService();
+            DependencyService.RegisterSingleton<IBillingService>(BillingHandler);
 
             MainPage = new MainPage();
         }

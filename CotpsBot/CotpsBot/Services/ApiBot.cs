@@ -16,6 +16,7 @@ namespace CotpsBot.Services
         #region Fields
         
         private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
+        private static IBillingService BillingHandler => DependencyService.Get<IBillingService>();
 
         #endregion
 
@@ -125,6 +126,52 @@ namespace CotpsBot.Services
                 MessagingCenter.Send<BtnControlMessage>(message, "BtnControlMessage");
             });
         }
+
+        private async Task<bool> EnsureSuscribtion()
+        {
+            try
+            {
+                await BillingHandler.Connect();
+                if (BillingHandler.IsConnected)
+                {
+                    if (!await BillingHandler.CheckBuy())
+                    {
+                        // send message
+                        await NotifyMessage(
+                            "Subscription error",
+                            "Your subscription has ended. Open the app and start the bot to renew it.",
+                            id: 1339);
+                        return false;
+                    }
+                    else
+                    {
+                        // subscribed
+                        return true;
+                    }
+                }
+                else
+                {
+                    await NotifyMessage(
+                        "Subscription error",
+                        "Billing service not available. Restart service manually.",
+                        id: 1339);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                await NotifyMessage(
+                    "Subscription error",
+                    "An error occurred while trying to verify the subscription.",
+                    id: 1339);
+                return false;
+            }
+            finally
+            {
+                await BillingHandler.Disconnect();
+            }
+        }
+
         public async Task LoginAndOperate(bool starting = false)
         {
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
@@ -134,8 +181,14 @@ namespace CotpsBot.Services
                     id: 1338);
                 return;
             }
-            
-            // disable btn
+
+            if (!await EnsureSuscribtion())
+            {
+                DependencyService.Get<IBotService>().Stop();
+                return;
+            }
+
+                // disable btn
             SendBtnControlStatus(false);
 
             var form = await GetLoginForm();

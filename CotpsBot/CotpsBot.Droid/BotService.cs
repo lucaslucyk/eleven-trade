@@ -42,16 +42,10 @@ namespace CotpsBot.Droid
         {
             if (intent.Action == "START_SERVICE")
             {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("Service started");
-#endif
                 RegisterNotification();
             }
             else if (intent.Action == "STOP_SERVICE")
             {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("Service stopped");
-#endif
                 StopForeground(true);
                 StopSelfResult(startId);
             }

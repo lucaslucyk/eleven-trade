@@ -21,7 +21,7 @@ namespace CotpsBot.Helpers
 
         #region Constants
 
-        public static readonly double ServiceInterval = 300.0;
+        public static readonly double ServiceInterval = 60.0;
 
         #endregion
 

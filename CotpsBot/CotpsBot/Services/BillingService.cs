@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CotpsBot.Models;
 using Plugin.InAppBilling;
+using Xamarin.Forms;
 
 namespace CotpsBot.Services
 {
@@ -43,7 +44,7 @@ namespace CotpsBot.Services
             this.IsConnected = false;
         }
 
-        public async Task<bool> CheckBuy()
+        public async Task<bool> CheckBuy(bool autoPurchaseAcknowledge = true)
         {
             // cant access to buy status
             if (!_isSupported)
@@ -52,10 +53,22 @@ namespace CotpsBot.Services
             // ensure connected
             await this.Connect();
             
+            
             var purchased = await _billing.GetPurchasesAsync(
                 ItemType.Subscription,
                 new List<string>{"cotps_service"});
-            return purchased.Any();
+            
+            var inAppBillingPurchases = purchased.ToList();
+            if (inAppBillingPurchases.Any() && autoPurchaseAcknowledge && Device.RuntimePlatform == Device.Android)
+            {
+                var confirm = inAppBillingPurchases.First();
+                if (!confirm.IsAcknowledged)
+                {
+                    await this._billing.AcknowledgePurchaseAsync(confirm.PurchaseToken);
+                }
+            }
+            
+            return inAppBillingPurchases.Any();
         }
 
         public async Task<PurchaseResult> Purchase()

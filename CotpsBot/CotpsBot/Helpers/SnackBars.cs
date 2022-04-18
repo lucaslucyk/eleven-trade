@@ -15,8 +15,8 @@ namespace CotpsBot.Helpers
                 Message = message,
                 Padding = new Thickness(5)
             };
-
-            BackgroundColor = Color.Green;
+            BackgroundColor = Color.FromHex("#35d65e");
+            // BackgroundColor = Color.Green;
             Duration = TimeSpan.FromSeconds(3);
             CornerRadius = new Thickness(5);
             if (actions != null)
@@ -34,8 +34,8 @@ namespace CotpsBot.Helpers
                 Message = message,
                 Padding = new Thickness(5)
             };
-
-            BackgroundColor = Color.Red;
+            BackgroundColor = Color.FromHex("#f45858");
+            // BackgroundColor = Color.Red;
             Duration = TimeSpan.FromSeconds(3);
             CornerRadius = new Thickness(5);
             if (actions != null)

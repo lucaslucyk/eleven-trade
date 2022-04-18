@@ -8,7 +8,7 @@ namespace CotpsBot.Services
         bool IsConnected { get; }
         Task Connect();
         Task Disconnect();
-        Task<bool> CheckBuy();
+        Task<bool> CheckBuy(bool autoPurchaseAcknowledge = true);
         Task<PurchaseResult> Purchase();
     }
 }

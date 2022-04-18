@@ -127,7 +127,7 @@ namespace CotpsBot.ViewModels
                 RemoveFormData();
         }
 
-        private async Task<bool> EnsureSuscribtion()
+        private async Task<bool> EnsureSubscription()
         {
             try
             {
@@ -176,13 +176,19 @@ namespace CotpsBot.ViewModels
         {
             this.BotStarting = true;
 
-            if (!await this.EnsureSuscribtion())
+
+            var svcRunning = DependencyService.Get<IBotService>().GetStatus();
+            
+            // allow stop but not start if not subscription
+            if (!svcRunning)
             {
-                this.BotStarting = false;
-                return;
+                if (!await this.EnsureSubscription())
+                {
+                    this.BotStarting = false;
+                    return;
+                }
             }
             
-            var svcRunning = DependencyService.Get<IBotService>().GetStatus();
             if (!this.AreFieldsValid() && !svcRunning)
             {
                 await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Phone and password required."));

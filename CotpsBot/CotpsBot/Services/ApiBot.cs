@@ -127,7 +127,7 @@ namespace CotpsBot.Services
             });
         }
 
-        private async Task<bool> EnsureSuscribtion()
+        private async Task<bool> EnsureSubscription()
         {
             try
             {
@@ -182,7 +182,7 @@ namespace CotpsBot.Services
                 return;
             }
 
-            if (!await EnsureSuscribtion())
+            if (!await EnsureSubscription())
             {
                 DependencyService.Get<IBotService>().Stop();
                 return;

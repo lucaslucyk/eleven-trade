@@ -118,7 +118,10 @@
                 BackgroundColor="Transparent"
                 Padding="15, 0">
                 
-                <Entry 
+                <Entry
+                    ClearButtonVisibility="WhileEditing"
+                    Keyboard="Telephone"
+                    ReturnType="Next"
                     Style="{StaticResource BorderlessEntryStyle}"
                     Placeholder="Your COTPS Phone" x:Name="EntryPhoneNumber"
                     IsReadOnly="{Binding IsRunning}"
@@ -126,6 +129,8 @@
                 
                 <Entry
                     IsPassword="True"
+                    IsTextPredictionEnabled="false"
+                    ClearButtonVisibility="WhileEditing"
                     Style="{StaticResource BorderlessEntryStyle}"
                     IsReadOnly="{Binding IsRunning}"
                     Placeholder="Your COTPS Password" x:Name="EntryPassword"

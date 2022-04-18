@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CotpsBot.Models;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -26,13 +27,31 @@ namespace CotpsBot.Helpers
         public static readonly double ServiceInterval = 300.0;
 
         // subscriptions
-        public static readonly string[] CotpsDeprecatedSubs = {"cotps_service"};
-        public static readonly string[] CotpsAvailableSubs = {
-            "cotps_service_month",
-            "cotps_service_year",
-            "cotps_service_week"
+        public static readonly SubscriptionPlan[] CotpsPlans = {
+            new SubscriptionPlan{
+                Id = "et_cotps_year",
+                Name = "COTPS Service (weekly)",
+                Description = "Weekly (9 U$D/week)",
+                Price = "9.0",
+                Interval = "Week"
+            },
+            new SubscriptionPlan
+            {
+                Id = "cotps_service",
+                Name = "COTPS Service (monthly)",
+                Description = "Monthly (30 U$D/month)",
+                Price = "30.0",
+                Interval = "Month"
+            },
+            new SubscriptionPlan{
+                Id = "et_cotps_week",
+                Name = "COTPS Service (yearly)",
+                Description = "Yearly (300 U$D/year)",
+                Price = "300.0",
+                Interval = "Year"
+            },
         };
-        
+
         #endregion
 
         #region Credentials

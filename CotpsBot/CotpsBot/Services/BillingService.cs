@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CotpsBot.Helpers;
 using CotpsBot.Models;
 using Plugin.InAppBilling;
 using Xamarin.Forms;
@@ -44,6 +45,36 @@ namespace CotpsBot.Services
             this.IsConnected = false;
         }
 
+        public async Task<IEnumerable<InAppBillingProduct>?> GetAvailableSubs()
+        {
+            // cant access to buy status
+            if (!_isSupported)
+                return null;
+            
+            // ensure connected
+            await this.Connect();
+            var available = await _billing.GetProductInfoAsync(
+                ItemType.Subscription, 
+                Settings.CotpsPlans.Select(sp => sp.Id).ToArray());
+            return available;
+        }
+
+        // public async Task<bool> CheckDeprecatedBuy()
+        // {
+        //     // cant access to buy status
+        //     if (!_isSupported)
+        //         return false;
+        //     
+        //     // ensure connected
+        //     await this.Connect();
+        //     
+        //     var purchased = await _billing.GetPurchasesAsync(
+        //         ItemType.Subscription,
+        //         Settings.CotpsDeprecatedSubs.ToList());
+        //     
+        //     return purchased.Any(purchase => Settings.CotpsDeprecatedSubs.Contains(purchase.Id) && !purchase.IsAcknowledged);
+        // }
+        
         public async Task<bool> CheckBuy(bool autoPurchaseAcknowledge = true)
         {
             // cant access to buy status
@@ -53,25 +84,28 @@ namespace CotpsBot.Services
             // ensure connected
             await this.Connect();
             
-            
             var purchased = await _billing.GetPurchasesAsync(
                 ItemType.Subscription,
-                new List<string>{"cotps_service"});
+                Settings.CotpsPlans.Select(sp => sp.Id).ToList());
             
             var inAppBillingPurchases = purchased.ToList();
             if (inAppBillingPurchases.Any() && autoPurchaseAcknowledge && Device.RuntimePlatform == Device.Android)
             {
-                var confirm = inAppBillingPurchases.First();
-                if (!confirm.IsAcknowledged)
+                foreach (var toConfirm in inAppBillingPurchases.Where(toConfirm => !toConfirm.IsAcknowledged))
                 {
-                    await this._billing.AcknowledgePurchaseAsync(confirm.PurchaseToken);
+                    await this._billing.AcknowledgePurchaseAsync(toConfirm.PurchaseToken);
                 }
             }
-            
+
             return inAppBillingPurchases.Any();
         }
 
         public async Task<PurchaseResult> Purchase()
+        {
+            return await this.Purchase(Settings.CotpsPlans.First().Id);
+        }
+        
+        public async Task<PurchaseResult> Purchase(string productId)
         {
             // cant access to buy status
             if (!_isSupported)
@@ -82,7 +116,7 @@ namespace CotpsBot.Services
 
             try
             {
-                var purchase = await this._billing.PurchaseAsync("cotps_service", ItemType.Subscription);
+                var purchase = await this._billing.PurchaseAsync(productId, ItemType.Subscription);
 
                 return new PurchaseResult
                 {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CotpsBot.Models;
 using CotpsBot.Services;
@@ -134,9 +136,18 @@ namespace CotpsBot.ViewModels
                 await BillingHandler.Connect();
                 if (BillingHandler.IsConnected)
                 {
-                    if (!await BillingHandler.CheckBuy())
+                    if (!await BillingHandler.CheckBuy(true))
                     {
-                        var result = await BillingHandler.Purchase();
+                        var subToBuy = await App.Current.MainPage.DisplayActionSheet(
+                            "Select a subscription plan to continue",
+                            "Cancel", 
+                            null, 
+                            Settings.CotpsPlans.Select(sp => sp.Description).ToArray());
+
+                        if (subToBuy == null)
+                            return false;
+                        // var buyId = Settings.CotpsPlans.First(sp => sp.Description == subToBuy).Id;
+                        var result = await BillingHandler.Purchase(Settings.CotpsPlans.First(sp => sp.Description == subToBuy).Id);
                         if (result.Ok)
                         {
                             await App.Current.MainPage.DisplaySnackBarAsync(new SuccessSnackBar(result.Message));

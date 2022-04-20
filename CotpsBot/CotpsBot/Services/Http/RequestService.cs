@@ -161,6 +161,21 @@ namespace CotpsBot.Services.Http
             return await GetAsync<BalanceResponse>(Settings.APIBalanceUrl);
         }
 
+        public async Task<TeamInfoResponse> GetTeamInfo(int type, int page = 1, int size = 20)
+        {
+            var finalUri = $"{Settings.APITeamInfoUrl}?page={page}&size={size}&type={type}";
+            return await GetAsync<TeamInfoResponse>(finalUri);
+        }
+
+        public async Task<ReceiveProfitResponse> ReceiveProfit(ReceiveProfitRequest data)
+        {
+            return await PostAsync<ReceiveProfitRequest, ReceiveProfitResponse>(Settings.APIReceiveProfitUrl, data);
+        }
+        public async Task<ReceiveProfitResponse> ReceiveProfit(int type)
+        {
+            return await ReceiveProfit(new ReceiveProfitRequest{type = type});
+        }
+
         public async Task<OrderCreateResponse> CreateOrder()
         {
             return await GetAsync<OrderCreateResponse>(Settings.APIOrderCreateUrl);

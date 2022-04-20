@@ -59,22 +59,6 @@ namespace CotpsBot.Services
             return available;
         }
 
-        // public async Task<bool> CheckDeprecatedBuy()
-        // {
-        //     // cant access to buy status
-        //     if (!_isSupported)
-        //         return false;
-        //     
-        //     // ensure connected
-        //     await this.Connect();
-        //     
-        //     var purchased = await _billing.GetPurchasesAsync(
-        //         ItemType.Subscription,
-        //         Settings.CotpsDeprecatedSubs.ToList());
-        //     
-        //     return purchased.Any(purchase => Settings.CotpsDeprecatedSubs.Contains(purchase.Id) && !purchase.IsAcknowledged);
-        // }
-        
         public async Task<bool> CheckBuy(bool autoPurchaseAcknowledge = true)
         {
             // cant access to buy status

@@ -103,6 +103,34 @@ namespace CotpsBot.Services
             }
         }
 
+        private async Task ReceiveProfits()
+        {
+            foreach (var level in Settings.TeamLevels)
+            {
+                var teamInfo = await ApiClient.GetTeamInfo(level);
+                if (!teamInfo.success || teamInfo.code < 200 || teamInfo.code >= 400) continue;
+                try
+                {
+                    var converted = Convert.ToDouble(teamInfo.data?.detail?.remainder);
+                    // if (!double.TryParse(teamInfo.data?.detail?.remainder, out var converted)) continue;
+                    if (!(converted >= 0.01)) continue;
+                    var receiveResponse = await ApiClient.ReceiveProfit(level);
+                    
+                    if (!receiveResponse.success)
+                    {
+                        await NotifyMessage("Residual warning", 
+                            $"Residual benefits for type {level} could not be obtained. (Code={receiveResponse.code})",
+                            id: 1340);
+                        return;
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+
         private async Task DoTransactions()
         {
             var balanceResponse = await ApiClient.GetBalance();
@@ -188,7 +216,7 @@ namespace CotpsBot.Services
                 return;
             }
 
-                // disable btn
+            // disable btn
             SendBtnControlStatus(false);
 
             var form = await GetLoginForm();
@@ -196,6 +224,9 @@ namespace CotpsBot.Services
             
             if (loginResult.success)
             {
+                // try to collect residuals
+                await this.ReceiveProfits();
+                
                 // try to create and confirm orders
                 await this.DoTransactions();
                     

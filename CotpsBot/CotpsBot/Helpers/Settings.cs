@@ -18,6 +18,8 @@ namespace CotpsBot.Helpers
         public static readonly string APIBalanceUrl = "/api/mine/user/getDealInfo";
         public static readonly string APIOrderCreateUrl = "/api/mine/user/createOrder";
         public static readonly string APIOrderSubmitUrl = "/api/mine/user/submitOrder";
+        public static readonly string APITeamInfoUrl = "/api/mine/user/getShareDetal";
+        public static readonly string APIReceiveProfitUrl = "/api/mine/user/receiveProfit";
 
         #endregion
 
@@ -25,6 +27,7 @@ namespace CotpsBot.Helpers
 
         // service
         public static readonly double ServiceInterval = 300.0;
+        public static readonly int[] TeamLevels = {1, 2, 3};
 
         // subscriptions
         public static readonly SubscriptionPlan[] CotpsPlans = {

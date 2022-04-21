@@ -24,6 +24,9 @@ namespace CotpsBot.Helpers
         #endregion
 
         #region Constants
+        
+        // notifications
+        public static readonly NotificationsIds Notifications = new NotificationsIds();
 
         // service
         public static readonly double ServiceInterval = 300.0;

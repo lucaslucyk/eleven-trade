@@ -42,7 +42,7 @@ namespace CotpsBot.Services
 
         #region Methods
 
-        private async Task NotifyMessage(string title, string message, string data = "", int id = 1337)
+        private async Task NotifyMessage(string title, string message, string data = "", int id = 1335)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -120,7 +120,7 @@ namespace CotpsBot.Services
                     {
                         await NotifyMessage("Residual warning", 
                             $"Residual benefits for type {level} could not be obtained. (Code={receiveResponse.code})",
-                            id: 1340);
+                            id: Settings.Notifications.ResidualError);
                         return;
                     }
                 }
@@ -168,7 +168,7 @@ namespace CotpsBot.Services
                         await NotifyMessage(
                             "Subscription error",
                             "Your subscription has ended. Open the app and start the bot to renew it.",
-                            id: 1339);
+                            id: Settings.Notifications.SubscriptionError);
                         return false;
                     }
                     else
@@ -182,7 +182,7 @@ namespace CotpsBot.Services
                     await NotifyMessage(
                         "Subscription error",
                         "Billing service not available. Restart service manually.",
-                        id: 1339);
+                        id: Settings.Notifications.SubscriptionError);
                     return false;
                 }
             }
@@ -191,7 +191,7 @@ namespace CotpsBot.Services
                 await NotifyMessage(
                     "Subscription error",
                     "An error occurred while trying to verify the subscription.",
-                    id: 1339);
+                    id: Settings.Notifications.SubscriptionError);
                 return false;
             }
             finally
@@ -206,7 +206,7 @@ namespace CotpsBot.Services
             {
                 // wait for internet connection - do nothing
                 await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
-                    id: 1338);
+                    id: Settings.Notifications.NetworkError);
                 return;
             }
 
@@ -251,7 +251,7 @@ namespace CotpsBot.Services
             {
                 // wait for internet connection - do nothing
                 await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
-                    id: 1338);
+                    id: Settings.Notifications.NetworkError);
                 return response;
             }
             

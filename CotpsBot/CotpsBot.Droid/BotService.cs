@@ -27,6 +27,7 @@ namespace CotpsBot.Droid
         #region Properties
 
         private bool IsRunning { get; set; } = false;
+        private bool IsBusy { get; set; } = false;
         private DateTime LastRun { get; set; }
 
         #endregion
@@ -59,7 +60,7 @@ namespace CotpsBot.Droid
                 new NotificationChannel("ServiceChannel", "Bot Service", NotificationImportance.Max);
             NotificationManager manager =
                 (NotificationManager) MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
-            manager.CreateNotificationChannel(channel);
+            manager?.CreateNotificationChannel(channel);
             Notification notification = new Notification.Builder(this, "ServiceChannel")
                 .SetContentTitle("COTPS Service working")
                 .SetSmallIcon(Resource.Drawable.eleven_trade_icon_small)
@@ -90,9 +91,11 @@ namespace CotpsBot.Droid
                 {
                     if ((DateTime.Now - LastRun).TotalSeconds > Settings.ServiceInterval)
                     {
+                        this.IsBusy = true;
                         this.LastRun = DateTime.Now;
                         await _apiBot.LoginAndOperate();
                         SendServiceMessage();
+                        this.IsBusy = false;
                     }
                     await Task.Delay(1000);
                 }
@@ -113,14 +116,19 @@ namespace CotpsBot.Droid
                         NotificationId = Settings.Notifications.ServiceError
                     };
                     await NotificationCenter.Current.Show(notification);
+                    
                 });
-                
-                Stop();
-                await Task.Delay(500);
-                Start();
+
+                await Task.Delay(200);
+                // restart
+                await Restart();
             }
         }
 
+        public bool GetBusyStatus()
+        {
+            return this.IsBusy;
+        }
         public bool GetStatus()
         {
             return this.IsRunning;
@@ -156,6 +164,31 @@ namespace CotpsBot.Droid
             this.IsRunning = false;
             if (_cts != null && !_cts.IsCancellationRequested)
                 _cts.Cancel();
+        }
+
+        public async Task Restart()
+        {
+            try
+            {
+                Stop();
+                await Task.Delay(200);
+                Start();
+            }
+            catch (Exception exception)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var restartNotify = new NotificationRequest
+                    {
+                        BadgeNumber = 1,
+                        Description = $"COTPS Service could not be restarted. Reason: {exception.Message}",
+                        Title = "COTPS Restart Error",
+                        ReturningData = "COTPS Restart Error",
+                        NotificationId = Settings.Notifications.RestartError
+                    };
+                    await NotificationCenter.Current.Show(restartNotify);
+                });
+            }
         }
     }
 }

@@ -8,7 +8,9 @@ namespace CotpsBot.Services
     {
         void Start();
         void Stop();
+        Task Restart();
         bool GetStatus();
+        bool GetBusyStatus();
         DateTime GetLastRun();
         Task<TransactionsBalance> GetBalance();
     }

@@ -44,7 +44,7 @@ namespace CotpsBot.Services
 
         private static void NotifyMessage(string title, string message, string data = "", int id = 1335)
         {
-            async void Action()
+            Device.BeginInvokeOnMainThread(async () =>
             {
                 var notification = new NotificationRequest
                 {
@@ -55,9 +55,7 @@ namespace CotpsBot.Services
                     NotificationId = id
                 };
                 await NotificationCenter.Current.Show(notification);
-            }
-
-            Device.BeginInvokeOnMainThread(Action);
+            });
         }
 
         private static void TryClearMessage(int notificationId)

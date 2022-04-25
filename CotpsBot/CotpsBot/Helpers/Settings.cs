@@ -12,7 +12,7 @@ namespace CotpsBot.Helpers
 
         #region API
 
-        public static readonly int APITimeOut = 15;
+        public static readonly int APITimeOut = 10;
         public static readonly string APIBaseUrl = "https://www.cotps.com:8443";
         public static readonly string APILoginType = "mobile";
         public static readonly string APILoginUrl = "/api/mine/sso/user_login_check";
@@ -27,7 +27,7 @@ namespace CotpsBot.Helpers
         #region Constants
         
         // base
-        public static readonly string CurrentVersion = "1.3.9";
+        public static readonly string CurrentVersion = "1.3.10";
         
         // notifications
         public static readonly NotificationsIds Notifications = new NotificationsIds();

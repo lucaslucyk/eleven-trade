@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10" android:versionName="1.3.9" package="com.companyname.ELEVEN_Trade">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="11" android:versionName="1.3.10" package="com.companyname.ELEVEN_Trade">
     <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="31" />
     <application android:label="ELEVEN Trade" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />

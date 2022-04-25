@@ -269,6 +269,9 @@ namespace CotpsBot.ViewModels
             this.SwitchMessage = this.IsRunning ? "BOT STOP" : "BOT START";
             this.LastRun = DependencyService.Get<IBotService>().GetLastRun();
 
+            if (this.SwitchEnabled)
+                this.SwitchEnabled = !DependencyService.Get<IBotService>().GetBusyStatus();
+
             if (this.IsRunning && this.SwitchEnabled)
                 this.Balance = await DependencyService.Get<IBotService>().GetBalance();
         }

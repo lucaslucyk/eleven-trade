@@ -9,5 +9,6 @@
         public readonly int SubscriptionError = 1339;
         public readonly int ResidualError = 1340;
         public readonly int LoginError = 1341;
+        public readonly int RestartError = 1342;
     }
 }

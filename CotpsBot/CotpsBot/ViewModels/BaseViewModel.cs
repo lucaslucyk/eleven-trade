@@ -36,6 +36,9 @@ namespace CotpsBot.ViewModels
         #endregion
         
         #region Properties
+
+        public string VersionMessage => $"Version {Settings.CurrentVersion}";
+
         public bool IsNotConnected {
             get { return isNotConnected; }
             set { SetProperty(ref isNotConnected, value); }

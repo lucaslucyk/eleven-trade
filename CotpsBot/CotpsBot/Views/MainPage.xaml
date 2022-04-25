@@ -170,6 +170,12 @@
                     IsVisible="{Binding BotStarting, Converter={StaticResource InverseBoolConverter}}"
                     IsEnabled="{Binding SwitchEnabled}"
                     Command="{Binding SwitchCommand}"/>
+                
+                <!--<Label 
+                    Text="{Binding VersionMessage}" 
+                    HorizontalOptions="EndAndExpand" 
+                    VerticalOptions="Center"
+                    Style="{StaticResource DescriptionLabelStyle}"/>-->
             </StackLayout>
         </StackLayout>
     </ScrollView>

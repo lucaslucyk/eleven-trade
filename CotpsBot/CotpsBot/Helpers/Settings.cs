@@ -26,6 +26,9 @@ namespace CotpsBot.Helpers
 
         #region Constants
         
+        // base
+        public static readonly string CurrentVersion = "1.3.9";
+        
         // notifications
         public static readonly NotificationsIds Notifications = new NotificationsIds();
 

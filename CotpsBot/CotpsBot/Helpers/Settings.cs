@@ -33,7 +33,7 @@ namespace CotpsBot.Helpers
         public static readonly NotificationsIds Notifications = new NotificationsIds();
 
         // service
-        public static readonly double ServiceInterval = 60.0;
+        public static readonly double ServiceInterval = 300.0;
         public static readonly int[] TeamLevels = {1, 2, 3};
 
         // subscriptions

@@ -48,7 +48,7 @@ namespace CotpsBot.Services.Http
             _client = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl),
-                Timeout = TimeSpan.FromSeconds(10)
+                Timeout = TimeSpan.FromSeconds(Settings.APITimeOut)
             };
             _client.DefaultRequestHeaders.Accept.Clear();
             //_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
@@ -59,12 +59,13 @@ namespace CotpsBot.Services.Http
 
         public void Logout()
         {
-            _client.DefaultRequestHeaders.Authorization = null;
+            if (_client != null) _client.DefaultRequestHeaders.Authorization = null;
         }
 
         private static void SetToken(string token)
         {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (_client != null)
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
         
         private static void CheckConnection()
@@ -105,10 +106,10 @@ namespace CotpsBot.Services.Http
         public async Task<TResult> GetAsync<TResult>(string uri, string token = "")
         {
             CheckConnection();
-            HttpResponseMessage response = await _client.GetAsync(uri).ConfigureAwait(false);
+            var response = await _client.GetAsync(uri).ConfigureAwait(false);
             await HandleResponse(response);
-            string serialized = await response.Content.ReadAsStringAsync();
-            TResult result = await Task.Run(
+            var serialized = await response.Content.ReadAsStringAsync();
+            var result = await Task.Run(
                     () => JsonConvert.DeserializeObject<TResult>(serialized))
                 .ConfigureAwait(false);
             return result;
@@ -146,7 +147,7 @@ namespace CotpsBot.Services.Http
         {
             CheckConnection();
             var formData = GetFormData(form);
-            HttpResponseMessage response = await _client.PostAsync(
+            var response = await _client.PostAsync(
                 Settings.APILoginUrl,
                 new FormUrlEncodedContent(formData));
             
@@ -191,14 +192,14 @@ namespace CotpsBot.Services.Http
         {
             CheckConnection();
 
-            string serialized = await Task.Run(() => JsonConvert.SerializeObject(data))
+            var serialized = await Task.Run(() => JsonConvert.SerializeObject(data))
             .ConfigureAwait(false);
             // empty response data to work 
             var responseData = string.Empty;
 
-            if (String.IsNullOrWhiteSpace(responseData))
+            if (string.IsNullOrWhiteSpace(responseData))
             {
-                HttpResponseMessage response = await _client.PostAsync(
+                var response = await _client.PostAsync(
                         uri,
                         new StringContent(serialized, Encoding.UTF8, "application/json"))
                     .ConfigureAwait(false);

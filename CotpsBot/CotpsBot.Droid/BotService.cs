@@ -107,15 +107,16 @@ namespace CotpsBot.Droid
                     var notification = new NotificationRequest
                     {
                         BadgeNumber = 1,
-                        Description = $"{e.Message} - Restarting service...",
-                        Title = "COTPS Service error",
-                        ReturningData = "COTPS Service Error",
+                        Description = $"Restarting COTPS service. Reason: {e.Message}",
+                        Title = "COTPS Service",
+                        ReturningData = "COTPS Service",
                         NotificationId = Settings.Notifications.ServiceError
                     };
                     await NotificationCenter.Current.Show(notification);
                 });
                 
                 Stop();
+                await Task.Delay(500);
                 Start();
             }
         }

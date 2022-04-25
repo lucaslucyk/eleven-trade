@@ -100,14 +100,20 @@ namespace CotpsBot.Services
 
             try
             {
+                // try to purchase
                 var purchase = await this._billing.PurchaseAsync(productId, ItemType.Subscription);
-
+                
+                // confirm subscription
+                if (purchase.State == PurchaseState.Purchased)
+                    await this._billing.AcknowledgePurchaseAsync(purchase.PurchaseToken);
+                
+                // return result to display message
                 return new PurchaseResult
                 {
-                    Ok = purchase.State == PurchaseState.Purchased ? true : false,
+                    Ok = purchase.State == PurchaseState.Purchased,
                     Message = purchase.State == PurchaseState.Purchased
-                        ? "Order completed successfully."
-                        : "Complete the order to proceed.",
+                        ? "Subscription completed successfully"
+                        : "Complete the subscription to proceed",
                 };
             }
             catch (InAppBillingPurchaseException e)
@@ -118,12 +124,12 @@ namespace CotpsBot.Services
                     Message = e.PurchaseError.ToString()
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new PurchaseResult
                 {
                     Ok = false,
-                    Message = "Something was wrong."
+                    Message = "Something was wrong"
                 };
             }
         }

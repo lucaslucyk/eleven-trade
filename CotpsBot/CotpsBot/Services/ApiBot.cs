@@ -42,9 +42,9 @@ namespace CotpsBot.Services
 
         #region Methods
 
-        private async Task NotifyMessage(string title, string message, string data = "", int id = 1335)
+        private static void NotifyMessage(string title, string message, string data = "", int id = 1335)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            async void Action()
             {
                 var notification = new NotificationRequest
                 {
@@ -55,6 +55,23 @@ namespace CotpsBot.Services
                     NotificationId = id
                 };
                 await NotificationCenter.Current.Show(notification);
+            }
+
+            Device.BeginInvokeOnMainThread(Action);
+        }
+
+        private static void TryClearMessage(int notificationId)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    NotificationCenter.Current.Clear(notificationId);
+                }
+                catch (Exception)
+                {
+                    // do nothing
+                }
             });
         }
 
@@ -68,7 +85,7 @@ namespace CotpsBot.Services
             };
         }
 
-        private void SendTransactionMessage(BalanceInfo data)
+        private static void SendTransactionMessage(BalanceInfo data)
         {
             var message = new TransactionsBalance
             {
@@ -97,13 +114,13 @@ namespace CotpsBot.Services
                 }
                 else
                 {
-                    await NotifyMessage("COTPS Order confirm error", $"Error confirming order {order.data.orderId}.");
+                    NotifyMessage("Order could not be confirmed", $"Error confirming order {order.data.orderId}.");
                     // DependencyService.Get<IBotService>().Stop();
                 }
             }
         }
 
-        private async Task ReceiveProfits()
+        private static async Task ReceiveProfits()
         {
             foreach (var level in Settings.TeamLevels)
             {
@@ -118,7 +135,7 @@ namespace CotpsBot.Services
                     
                     if (!receiveResponse.success)
                     {
-                        await NotifyMessage("Residual warning", 
+                        NotifyMessage("Team residual could not be obtained", 
                             $"Residual benefits for type {level} could not be obtained. (Code={receiveResponse.code})",
                             id: Settings.Notifications.ResidualError);
                         return;
@@ -146,7 +163,7 @@ namespace CotpsBot.Services
             }
         }
 
-        private void SendBtnControlStatus(bool enabled)
+        private static void SendBtnControlStatus(bool enabled)
         {
             var message = new BtnControlMessage {Status = enabled};
             Device.BeginInvokeOnMainThread(() =>
@@ -155,7 +172,7 @@ namespace CotpsBot.Services
             });
         }
 
-        private async Task<bool> EnsureSubscription()
+        private static async Task<bool> EnsureSubscription()
         {
             try
             {
@@ -165,7 +182,7 @@ namespace CotpsBot.Services
                     if (!await BillingHandler.CheckBuy())
                     {
                         // send message
-                        await NotifyMessage(
+                        NotifyMessage(
                             "Subscription error",
                             "Your subscription has ended. Open the app and start the bot to renew it.",
                             id: Settings.Notifications.SubscriptionError);
@@ -179,16 +196,16 @@ namespace CotpsBot.Services
                 }
                 else
                 {
-                    await NotifyMessage(
+                    NotifyMessage(
                         "Subscription error",
                         "Billing service not available. Restart service manually.",
                         id: Settings.Notifications.SubscriptionError);
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                await NotifyMessage(
+                NotifyMessage(
                     "Subscription error",
                     "An error occurred while trying to verify the subscription.",
                     id: Settings.Notifications.SubscriptionError);
@@ -205,10 +222,13 @@ namespace CotpsBot.Services
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
                 // wait for internet connection - do nothing
-                await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
+                NotifyMessage("No Internet Connection", "Waiting Internet connection to operate.",
                     id: Settings.Notifications.NetworkError);
                 return;
             }
+            
+            // clear no internet connection message
+            TryClearMessage(Settings.Notifications.NetworkError);
 
             if (!await EnsureSubscription())
             {
@@ -224,8 +244,11 @@ namespace CotpsBot.Services
             
             if (loginResult.success)
             {
+                // remove possible login error
+                TryClearMessage(Settings.Notifications.LoginError);
+                
                 // try to collect residuals
-                await this.ReceiveProfits();
+                await ReceiveProfits();
                 
                 // try to create and confirm orders
                 await this.DoTransactions();
@@ -235,7 +258,10 @@ namespace CotpsBot.Services
             }
             else
             {
-                await NotifyMessage("COTPS Login error", "Check your credentials and restart bot service.");
+                NotifyMessage(
+                    "COTPS Login Error", 
+                    "Check your credentials and restart bot service.",
+                    id: Settings.Notifications.LoginError);
                 if (loginResult.code == 411)
                     DependencyService.Get<IBotService>().Stop();
             }
@@ -250,7 +276,7 @@ namespace CotpsBot.Services
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
                 // wait for internet connection - do nothing
-                await NotifyMessage("Network error", "No internet connection. Waiting to make new requests.",
+                NotifyMessage("No Internet Connection", "Waiting Internet connection to operate.",
                     id: Settings.Notifications.NetworkError);
                 return response;
             }
@@ -259,11 +285,17 @@ namespace CotpsBot.Services
             var loginResult = await ApiClient.LoginAsync(form);
             if (!loginResult.success)
             {
-                await NotifyMessage("COTPS Login error", "Check your credentials and restart bot service.");
+                NotifyMessage(
+                    "COTPS Login Error", 
+                    "Check your credentials and restart bot service.",
+                    id: Settings.Notifications.LoginError);
                 if (loginResult.code == 411)
                     DependencyService.Get<IBotService>().Stop();
                 return response;
             }
+            
+            // remove possible login error
+            TryClearMessage(Settings.Notifications.LoginError);
             
             // get data and return
             var balance = await ApiClient.GetBalance();

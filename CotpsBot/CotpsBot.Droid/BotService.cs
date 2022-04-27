@@ -41,14 +41,15 @@ namespace CotpsBot.Droid
         public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags,
             int startId)
         {
-            if (intent.Action == "START_SERVICE")
+            switch (intent.Action)
             {
-                RegisterNotification();
-            }
-            else if (intent.Action == "STOP_SERVICE")
-            {
-                StopForeground(true);
-                StopSelfResult(startId);
+                case "START_SERVICE":
+                    RegisterNotification();
+                    break;
+                case "STOP_SERVICE":
+                    StopForeground(true);
+                    StopSelfResult(startId);
+                    break;
             }
 
             return StartCommandResult.NotSticky;
@@ -56,18 +57,26 @@ namespace CotpsBot.Droid
 
         private void RegisterNotification()
         {
-            NotificationChannel channel =
-                new NotificationChannel("ServiceChannel", "Bot Service", NotificationImportance.Max);
-            NotificationManager manager =
-                (NotificationManager) MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
+            var channel = new NotificationChannel("ServiceChannel", "Bot Service", NotificationImportance.Max);
+            channel.Importance = NotificationImportance.High;
+            channel.EnableLights(true);
+            channel.EnableVibration(true);
+            channel.SetShowBadge(true);
+            
+            var manager = (NotificationManager) MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
             manager?.CreateNotificationChannel(channel);
-            Notification notification = new Notification.Builder(this, "ServiceChannel")
-                .SetContentTitle("COTPS Service working")
+            
+            var notification = new Notification.Builder(this, "ServiceChannel")
+                .SetContentTitle("COTPS Service")
+                .SetContentText("COTPS Service is working.")
                 .SetSmallIcon(Resource.Drawable.eleven_trade_icon_small)
                 .SetOngoing(true)
                 .Build();
 
-            StartForeground(100, notification);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                StartForeground(100, notification);
+            });
         }
 
         private void SendServiceMessage()
@@ -119,9 +128,30 @@ namespace CotpsBot.Droid
                     
                 });
 
-                await Task.Delay(200);
-                // restart
-                await Restart();
+                try
+                {
+                    Stop();
+                    Start();
+                }
+                catch (Exception exception)
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        var restartNotify = new NotificationRequest
+                        {
+                            BadgeNumber = 1,
+                            Description = $"COTPS Service could not be restarted. Reason: {exception.Message}",
+                            Title = "COTPS Restart Error",
+                            ReturningData = "COTPS Restart Error",
+                            NotificationId = Settings.Notifications.RestartError
+                        };
+                        await NotificationCenter.Current.Show(restartNotify);
+                    });
+                }
+
+                // await Task.Delay(200);
+                // // restart
+                // await Restart();
             }
         }
 
@@ -146,7 +176,7 @@ namespace CotpsBot.Droid
         
         public void Start()
         {
-            Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(BotService));
+            var startService = new Intent(MainActivity.ActivityCurrent, typeof(BotService));
             startService.SetAction("START_SERVICE");
             MainActivity.ActivityCurrent.StartService(startService);
 
@@ -157,7 +187,7 @@ namespace CotpsBot.Droid
 
         public void Stop()
         {
-            Intent stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
+            var stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
             stopIntent.SetAction("STOP_SERVICE");
             MainActivity.ActivityCurrent.StartService(stopIntent);
 

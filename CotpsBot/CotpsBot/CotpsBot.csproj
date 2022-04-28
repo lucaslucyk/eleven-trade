@@ -26,6 +26,21 @@
         <DependentUpon>MainPage.xaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Resources\Lang\LangRes.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LangRes.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Lang\LangRes.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LangRes.en.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\Lang\LangRes.es.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LangRes.es.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -52,6 +67,18 @@
       <EmbeddedResource Include="Resources\Fonts\TitilliumWeb-Regular.ttf" />
       <None Remove="Resources\Fonts\TitilliumWeb-SemiBold.ttf" />
       <EmbeddedResource Include="Resources\Fonts\TitilliumWeb-SemiBold.ttf" />
+      <EmbeddedResource Update="Resources\Lang\LangRes.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LangRes.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Lang\LangRes.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LangRes.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Lang\LangRes.es.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>LangRes.es.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

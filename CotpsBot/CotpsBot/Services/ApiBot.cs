@@ -15,6 +15,7 @@ namespace CotpsBot.Services
     {
         #region Fields
         
+        private static ICodeTranslator Translator => DependencyService.Get<ICodeTranslator>();
         private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
         private static IBillingService BillingHandler => DependencyService.Get<IBillingService>();
 
@@ -112,7 +113,9 @@ namespace CotpsBot.Services
                 }
                 else
                 {
-                    NotifyMessage("Order could not be confirmed", $"Error confirming order {order.data.orderId}.");
+                    var eco = Translator.Translate("error_confirming_order");
+                    NotifyMessage(Translator.Translate("order_not_confirmed"), 
+                        $"{eco} {order.data.orderId}.");
                     // DependencyService.Get<IBotService>().Stop();
                 }
             }
@@ -133,8 +136,9 @@ namespace CotpsBot.Services
                     
                     if (!receiveResponse.success)
                     {
-                        NotifyMessage("Team residual could not be obtained", 
-                            $"Residual benefits for type {level} could not be obtained. (Code={receiveResponse.code})",
+                        var residualDetail = Translator.Translate("residual_not_obtained_details");
+                        NotifyMessage(Translator.Translate("residual_not_obtained"), 
+                            $"{residualDetail}. (Code={receiveResponse.code})",
                             id: Settings.Notifications.ResidualError);
                         return;
                     }
@@ -181,8 +185,8 @@ namespace CotpsBot.Services
                     {
                         // send message
                         NotifyMessage(
-                            "Subscription error",
-                            "Your subscription has ended. Open the app and start the bot to renew it.",
+                            Translator.Translate("subscription_error"),
+                            Translator.Translate("sub_ended_open_to_renew"),
                             id: Settings.Notifications.SubscriptionError);
                         return false;
                     }
@@ -195,8 +199,8 @@ namespace CotpsBot.Services
                 else
                 {
                     NotifyMessage(
-                        "Subscription error",
-                        "Billing service not available. Restart service manually.",
+                        Translator.Translate("subscription_error"),
+                        Translator.Translate("billing_svc_not_available_restart"),
                         id: Settings.Notifications.SubscriptionError);
                     return false;
                 }
@@ -204,8 +208,8 @@ namespace CotpsBot.Services
             catch (Exception)
             {
                 NotifyMessage(
-                    "Subscription error",
-                    "An error occurred while trying to verify the subscription.",
+                    Translator.Translate("subscription_error"),
+                    Translator.Translate("sub_verifying_error"),
                     id: Settings.Notifications.SubscriptionError);
                 return false;
             }
@@ -220,7 +224,8 @@ namespace CotpsBot.Services
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
                 // wait for internet connection - do nothing
-                NotifyMessage("No Internet Connection", "Waiting Internet connection to operate.",
+                NotifyMessage(Translator.Translate("no_internet_connection"), 
+                    Translator.Translate("waiting_internet_to_operate"),
                     id: Settings.Notifications.NetworkError);
                 return;
             }
@@ -257,8 +262,8 @@ namespace CotpsBot.Services
             else
             {
                 NotifyMessage(
-                    "COTPS Login Error", 
-                    "Check your credentials and restart bot service.",
+                    Translator.Translate("cotps_login_error"), 
+                    Translator.Translate("check_credentials_and_restart_bot"),
                     id: Settings.Notifications.LoginError);
                 if (loginResult.code == 411)
                     DependencyService.Get<IBotService>().Stop();
@@ -274,7 +279,8 @@ namespace CotpsBot.Services
             if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
                 // wait for internet connection - do nothing
-                NotifyMessage("No Internet Connection", "Waiting Internet connection to operate.",
+                NotifyMessage(Translator.Translate("no_internet_connection"), 
+                    Translator.Translate("waiting_internet_to_operate"),
                     id: Settings.Notifications.NetworkError);
                 return response;
             }
@@ -284,8 +290,8 @@ namespace CotpsBot.Services
             if (!loginResult.success)
             {
                 NotifyMessage(
-                    "COTPS Login Error", 
-                    "Check your credentials and restart bot service.",
+                    Translator.Translate("cotps_login_error"), 
+                    Translator.Translate("check_credentials_and_restart_bot"),
                     id: Settings.Notifications.LoginError);
                 if (loginResult.code == 411)
                     DependencyService.Get<IBotService>().Stop();

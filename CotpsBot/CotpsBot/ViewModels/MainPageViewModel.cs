@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CotpsBot.Models;
@@ -11,6 +12,7 @@ using Plugin.LocalNotification;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml.Internals;
 
 
 namespace CotpsBot.ViewModels
@@ -20,7 +22,7 @@ namespace CotpsBot.ViewModels
         #region Fields
 
         private string _taskMessage = "Stopped";
-        private string _switchMessage = "Bot Start";
+        private string _switchMessage = Translator.Translate("BOT START");
         private bool _switchEnabled = true;
         private bool _isRunning;
         private bool _botStarting;
@@ -29,8 +31,9 @@ namespace CotpsBot.ViewModels
         private DateTime _lastRun;
         private bool _rememberPassword;
         private TransactionsBalance _balance;
+        private static ICodeTranslator Translator => DependencyService.Get<ICodeTranslator>();
         private static IBillingService BillingHandler => DependencyService.Get<IBillingService>();
-
+        
         #endregion
 
         #region Constructor
@@ -168,13 +171,13 @@ namespace CotpsBot.ViewModels
                 }
                 else
                 {
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Billing service not available."));
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("billing_service_not_available")));
                     return false;
                 }
             }
             catch (Exception e)
             {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("An error occurred while trying to buy the COTPS service."));
+                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("error_trying_buy_cotps")));
                 return false;
             }
             finally
@@ -202,7 +205,7 @@ namespace CotpsBot.ViewModels
             
             if (!this.AreFieldsValid() && !svcRunning)
             {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar("Phone and password required."));
+                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("phone_password_required")));
                 this.BotStarting = false;
                 return;
             }
@@ -266,7 +269,7 @@ namespace CotpsBot.ViewModels
         {
             // start data when open
             this.IsRunning = DependencyService.Get<IBotService>().GetStatus();
-            this.SwitchMessage = this.IsRunning ? "BOT STOP" : "BOT START";
+            this.SwitchMessage = Translator.Translate(this.IsRunning ? "BOT STOP" : "BOT START");
             this.LastRun = DependencyService.Get<IBotService>().GetLastRun();
 
             if (this.SwitchEnabled)
@@ -306,7 +309,7 @@ namespace CotpsBot.ViewModels
                 {
                     this.IsRunning = message.IsRunning;
                     this.LastRun = message.LastRun;
-                    this.SwitchMessage = message.IsRunning ? "BOT STOP" : "BOT START";
+                    this.SwitchMessage = Translator.Translate(message.IsRunning ? "BOT STOP" : "BOT START");
                 });
             });
             

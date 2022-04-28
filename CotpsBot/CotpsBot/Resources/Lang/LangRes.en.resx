@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="bot_status" xml:space="preserve">
+        <value>BOT STATUS</value>
+    </data>
+    <data name="bot_off" xml:space="preserve">
+        <value>OFF</value>
+    </data>
+    <data name="bot_on" xml:space="preserve">
+        <value>ON</value>
+    </data>
+    <data name="last_run" xml:space="preserve">
+        <value>LAST RUN</value>
+    </data>
+    <data name="total_balance" xml:space="preserve">
+        <value>TOTAL BALANCE</value>
+    </data>
+    <data name="freeze_balance" xml:space="preserve">
+        <value>FREEZE BALANCE</value>
+    </data>
+    <data name="free_balance" xml:space="preserve">
+        <value>FREE BALANCE</value>
+    </data>
+    <data name="your_cotps_phone" xml:space="preserve">
+        <value>Your COTPS Phone</value>
+    </data>
+    <data name="your_cotps_password" xml:space="preserve">
+        <value>Your COTPS Password</value>
+    </data>
+    <data name="remember_credentials" xml:space="preserve">
+        <value>Remember credentials</value>
+    </data>
+    <data name="BOT START" xml:space="preserve">
+        <value>BOT START</value>
+    </data>
+    <data name="BOT STOP" xml:space="preserve">
+        <value>BOT STOP</value>
+    </data>
+    <data name="billing_service_not_available" xml:space="preserve">
+        <value>Billing service not available</value>
+    </data>
+    <data name="error_trying_buy_cotps" xml:space="preserve">
+        <value>An error occurred while trying to buy the COTPS service</value>
+    </data>
+    <data name="phone_password_required" xml:space="preserve">
+        <value>Phone and Password required</value>
+    </data>
+    <data name="phone_required" xml:space="preserve">
+        <value>Phone number is required</value>
+    </data>
+    <data name="password_required" xml:space="preserve">
+        <value>Password is required</value>
+    </data>
+    <data name="no_internet_connection" xml:space="preserve">
+        <value>No Internet Connection</value>
+    </data>
+    <data name="waiting_internet_to_operate" xml:space="preserve">
+        <value>Waiting Internet connection to operate</value>
+    </data>
+    <data name="cotps_login_error" xml:space="preserve">
+        <value>COTPS Login Error</value>
+    </data>
+    <data name="check_credentials_and_restart_bot" xml:space="preserve">
+        <value>Check your credentials and restart bot service</value>
+    </data>
+    <data name="subscription_error" xml:space="preserve">
+        <value>Subscription error</value>
+    </data>
+    <data name="sub_ended_open_to_renew" xml:space="preserve">
+        <value>Your subscription has ended. Open the app and start the bot to renew it</value>
+    </data>
+    <data name="billing_svc_not_available_restart" xml:space="preserve">
+        <value>Billing service not available. Restart bot manually.</value>
+    </data>
+    <data name="sub_verifying_error" xml:space="preserve">
+        <value>An error occurred while trying to verify the subscription</value>
+    </data>
+    <data name="residual_not_obtained" xml:space="preserve">
+        <value>Team residual could not be obtained</value>
+    </data>
+    <data name="residual_not_obtained_details" xml:space="preserve">
+        <value>Residual benefits could not be obtained</value>
+    </data>
+    <data name="order_not_confirmed" xml:space="preserve">
+        <value>Order could not be confirmed</value>
+    </data>
+    <data name="error_confirming_order" xml:space="preserve">
+        <value>Error confirming order</value>
+    </data>
+    <data name="unsupported_device" xml:space="preserve">
+        <value>Unsupported device</value>
+    </data>
+    <data name="sub_completed_successfully" xml:space="preserve">
+        <value>Subscription completed successfully</value>
+    </data>
+    <data name="sub_complete_to_proceed" xml:space="preserve">
+        <value>Complete the subscription to proceed</value>
+    </data>
+    <data name="something_was_wrong" xml:space="preserve">
+        <value>Something was wrong</value>
+    </data>
+    <data name="cotps_service" xml:space="preserve">
+        <value>COTPS Service</value>
+    </data>
+    <data name="cotps_service_working" xml:space="preserve">
+        <value>COTPS Bot Service is working</value>
+    </data>
+    <data name="cotps_svc_not_restarted" xml:space="preserve">
+        <value>COTPS Service could not be restarted</value>
+    </data>
+    <data name="reason" xml:space="preserve">
+        <value>Reason</value>
+    </data>
+    <data name="cotps_restart_error" xml:space="preserve">
+        <value>COTPS Bot Restart Error</value>
+    </data>
+    <data name="restarting_cotps_bot" xml:space="preserve">
+        <value>Restarting COTPS Bot</value>
+    </data>
+</root>

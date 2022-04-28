@@ -8,7 +8,7 @@ namespace CotpsBot.Services
     {
         void Start();
         void Stop();
-        Task Restart();
+        // Task Restart();
         bool GetStatus();
         bool GetBusyStatus();
         DateTime GetLastRun();

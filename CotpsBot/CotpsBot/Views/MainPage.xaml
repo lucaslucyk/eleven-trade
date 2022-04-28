@@ -42,18 +42,18 @@
                 <StackLayout>
                     <Label
                         Margin="16, 10, 16, 0"
-                        Text="BOT STATUS"
+                        Text="{extensions:Translate bot_status }"
                         Style="{StaticResource TitleLabelStyle}" />
                     <Label
                         IsVisible="{Binding IsRunning}"
                         Margin="16, 0, 16, 5"
-                        Text="ON"
+                        Text="{extensions:Translate bot_on }"
                         Style="{StaticResource BotStatusStyle}" 
                         TextColor="{StaticResource PrimaryGreen}" />
                     <Label
                         IsVisible="{Binding IsRunning, Converter={StaticResource InverseBoolConverter}}"
                         Margin="16, 0, 16, 5"
-                        Text="OFF"
+                        Text="{extensions:Translate bot_off }"
                         Style="{StaticResource BotStatusStyle}" 
                         TextColor="{StaticResource PrimaryRed}" />
                     
@@ -64,7 +64,7 @@
                     <Label
                         Style="{StaticResource TitleLabelStyle}"
                         Margin="16, 10, 16, 0"
-                        Text="LAST RUN" />
+                        Text="{extensions:Translate last_run }" />
                     <Label
                         Margin="16, 0, 16, 5"
                         Text="{Binding LastRun}"
@@ -75,7 +75,7 @@
                 <StackLayout>
                     <Label
                         Margin="16, 10, 16, 0"
-                        Text="TOTAL BALANCE"
+                        Text="{extensions:Translate total_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
                     <Label
                         Margin="16, 0, 16, 5"
@@ -88,7 +88,7 @@
                 <StackLayout>
                     <Label
                         Margin="16, 10, 16, 0"
-                        Text="FREEZE BALANCE"
+                        Text="{extensions:Translate freeze_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
                     <Label
                         Margin="16, 0, 16, 5"
@@ -101,7 +101,7 @@
                 <StackLayout>
                     <Label
                         Margin="16, 10, 16, 0"
-                        Text="FREE BALANCE"
+                        Text="{extensions:Translate free_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
                     <Label
                         Margin="16, 0, 16, 5"
@@ -123,7 +123,7 @@
                     Keyboard="Telephone"
                     ReturnType="Next"
                     Style="{StaticResource BorderlessEntryStyle}"
-                    Placeholder="Your COTPS Phone" x:Name="EntryPhoneNumber"
+                    Placeholder="{extensions:Translate your_cotps_phone }" x:Name="EntryPhoneNumber"
                     IsReadOnly="{Binding IsRunning}"
                     Text="{Binding PhoneNumber.Value}"/>
                 
@@ -133,7 +133,7 @@
                     ClearButtonVisibility="WhileEditing"
                     Style="{StaticResource BorderlessEntryStyle}"
                     IsReadOnly="{Binding IsRunning}"
-                    Placeholder="Your COTPS Password" x:Name="EntryPassword"
+                    Placeholder="{extensions:Translate your_cotps_password }" x:Name="EntryPassword"
                     Text="{Binding Password.Value}" />
                 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
@@ -146,7 +146,7 @@
                         VerticalOptions="Center"
                         IsChecked="{Binding RememberPassword}"/>
                     <Label 
-                        Text="Remember credentials" 
+                        Text="{extensions:Translate remember_credentials }" 
                         HorizontalOptions="StartAndExpand" 
                         VerticalOptions="Center"
                         Style="{StaticResource DescriptionLabelStyle}"/>

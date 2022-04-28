@@ -20,7 +20,8 @@ namespace CotpsBot.Droid
         #region Fields
 
         CancellationTokenSource _cts;
-        private ApiBot _apiBot = new ApiBot();
+        private readonly ApiBot _apiBot = new ApiBot();
+        private static readonly CodeTranslator Translator = new CodeTranslator();
 
         #endregion
 
@@ -67,8 +68,8 @@ namespace CotpsBot.Droid
             manager?.CreateNotificationChannel(channel);
             
             var notification = new Notification.Builder(this, "ServiceChannel")
-                .SetContentTitle("COTPS Service")
-                .SetContentText("COTPS Service is working.")
+                .SetContentTitle(Translator.Translate("cotps_service"))
+                .SetContentText(Translator.Translate("cotps_service_working"))
                 .SetSmallIcon(Resource.Drawable.eleven_trade_icon_small)
                 .SetOngoing(true)
                 .Build();
@@ -116,11 +117,13 @@ namespace CotpsBot.Droid
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
+                    var reason = Translator.Translate("reason");
+                    var restarting = Translator.Translate("restarting_cotps_bot");
                     var notification = new NotificationRequest
                     {
                         BadgeNumber = 1,
-                        Description = $"Restarting COTPS service. Reason: {e.Message}",
-                        Title = "COTPS Service",
+                        Description = $"{restarting}. {reason}: {e.Message}",
+                        Title = Translator.Translate("cotps_service"),
                         ReturningData = "COTPS Service",
                         NotificationId = Settings.Notifications.ServiceError
                     };
@@ -137,11 +140,13 @@ namespace CotpsBot.Droid
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
+                        var restartDescrip = Translator.Translate("cotps_svc_not_restarted");
+                        var reason = Translator.Translate("reason");
                         var restartNotify = new NotificationRequest
                         {
                             BadgeNumber = 1,
-                            Description = $"COTPS Service could not be restarted. Reason: {exception.Message}",
-                            Title = "COTPS Restart Error",
+                            Description = $"{restartDescrip}. {reason}: {exception.Message}",
+                            Title = Translator.Translate("cotps_restart_error"),
                             ReturningData = "COTPS Restart Error",
                             NotificationId = Settings.Notifications.RestartError
                         };
@@ -196,29 +201,29 @@ namespace CotpsBot.Droid
                 _cts.Cancel();
         }
 
-        public async Task Restart()
-        {
-            try
-            {
-                Stop();
-                await Task.Delay(200);
-                Start();
-            }
-            catch (Exception exception)
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    var restartNotify = new NotificationRequest
-                    {
-                        BadgeNumber = 1,
-                        Description = $"COTPS Service could not be restarted. Reason: {exception.Message}",
-                        Title = "COTPS Restart Error",
-                        ReturningData = "COTPS Restart Error",
-                        NotificationId = Settings.Notifications.RestartError
-                    };
-                    await NotificationCenter.Current.Show(restartNotify);
-                });
-            }
-        }
+        // public async Task Restart()
+        // {
+        //     try
+        //     {
+        //         Stop();
+        //         await Task.Delay(200);
+        //         Start();
+        //     }
+        //     catch (Exception exception)
+        //     {
+        //         Device.BeginInvokeOnMainThread(async () =>
+        //         {
+        //             var restartNotify = new NotificationRequest
+        //             {
+        //                 BadgeNumber = 1,
+        //                 Description = $"COTPS Service could not be restarted. Reason: {exception.Message}",
+        //                 Title = "COTPS Restart Error",
+        //                 ReturningData = "COTPS Restart Error",
+        //                 NotificationId = Settings.Notifications.RestartError
+        //             };
+        //             await NotificationCenter.Current.Show(restartNotify);
+        //         });
+        //     }
+        // }
     }
 }

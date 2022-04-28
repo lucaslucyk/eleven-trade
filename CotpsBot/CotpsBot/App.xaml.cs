@@ -19,6 +19,7 @@ namespace CotpsBot
     {
         #region Fields
 
+        public static CodeTranslator Translator;
         public static RequestService ApiClient;
         public static BillingService BillingHandler;
 
@@ -27,6 +28,9 @@ namespace CotpsBot
         {
             InitializeComponent();
 
+            Translator = new CodeTranslator();
+            DependencyService.RegisterSingleton<ICodeTranslator>(Translator);
+            
             ApiClient = new RequestService();
             DependencyService.RegisterSingleton<IRequestService>(ApiClient);
 

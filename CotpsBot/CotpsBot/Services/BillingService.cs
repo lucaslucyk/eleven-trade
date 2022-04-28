@@ -15,6 +15,7 @@ namespace CotpsBot.Services
         private IInAppBilling _billing;
         private bool _isConnected = false;
         private bool _isSupported;
+        private static ICodeTranslator Translator => DependencyService.Get<ICodeTranslator>();
         
         public BillingService()
         {
@@ -93,7 +94,7 @@ namespace CotpsBot.Services
         {
             // cant access to buy status
             if (!_isSupported)
-                return new PurchaseResult {Ok = false, Message = "Device not allowed"};
+                return new PurchaseResult {Ok = false, Message = Translator.Translate("unsupported_device")};
             
             // ensure connected
             await this.Connect();
@@ -112,8 +113,8 @@ namespace CotpsBot.Services
                 {
                     Ok = purchase.State == PurchaseState.Purchased,
                     Message = purchase.State == PurchaseState.Purchased
-                        ? "Subscription completed successfully"
-                        : "Complete the subscription to proceed",
+                        ? Translator.Translate("sub_completed_successfully")
+                        : Translator.Translate("sub_complete_to_proceed"),
                 };
             }
             catch (InAppBillingPurchaseException e)
@@ -129,7 +130,7 @@ namespace CotpsBot.Services
                 return new PurchaseResult
                 {
                     Ok = false,
-                    Message = "Something was wrong"
+                    Message = Translator.Translate("something_was_wrong")
                 };
             }
         }

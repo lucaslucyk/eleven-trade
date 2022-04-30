@@ -27,9 +27,9 @@
         public double fee {get; set;}
         public double in_fee {get; set;}
         public int del_address_count {get; set;}
-        public int lixibao_profit {get; set;}
+        public string lixibao_profit {get; set;}
         public double recharge {get; set;}
-        public int get_money {get; set;}
+        public string get_money {get; set;}
         public int inviteId {get; set;}
         public int invite2Id {get; set;}
         public int invite3Id {get; set;}

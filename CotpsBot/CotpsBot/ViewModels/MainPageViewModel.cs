@@ -308,7 +308,8 @@ namespace CotpsBot.ViewModels
             }
             catch (TaskCanceledException e)
             {
-                await App.Current.MainPage?.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
+                if (App.Current.MainPage != null)
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
             }
         }
 

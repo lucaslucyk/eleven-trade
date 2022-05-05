@@ -48,7 +48,7 @@ namespace CotpsBot.Services.Http
             _client = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl),
-                Timeout = TimeSpan.FromSeconds(Settings.APITimeOut)
+                Timeout = Settings.APITimeOut
             };
             _client.DefaultRequestHeaders.Accept.Clear();
             //_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));

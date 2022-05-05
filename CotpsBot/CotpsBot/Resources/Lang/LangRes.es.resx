@@ -135,4 +135,10 @@
     <data name="restarting_cotps_bot" xml:space="preserve">
         <value>Reiniciando bot de COTPS</value>
     </data>
+    <data name="cant_get_data" xml:space="preserve">
+        <value>No se pueden obtener datos. Conexión a Internet Inestable</value>
+    </data>
+    <data name="no_internet_verify_sub" xml:space="preserve">
+        <value>Sin conexión a Internet para verificar la suscripción</value>
+    </data>
 </root>

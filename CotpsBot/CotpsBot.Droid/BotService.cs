@@ -5,6 +5,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using CotpsBot.Exceptions;
 using CotpsBot.Helpers;
 using CotpsBot.Models;
 using CotpsBot.Services;
@@ -103,7 +104,25 @@ namespace CotpsBot.Droid
                     {
                         this.IsBusy = true;
                         this.LastRun = DateTime.Now;
-                        await _apiBot.LoginAndOperate();
+                        try
+                        {
+                            await _apiBot.LoginAndOperate();
+                        }
+                        catch (InternetException e)
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                var notification = new NotificationRequest
+                                {
+                                    BadgeNumber = 1,
+                                    Title = Translator.Translate("no_internet_connection"),
+                                    Description = Translator.Translate("waiting_internet_to_operate"),
+                                    ReturningData = "COTPS Service",
+                                    NotificationId = Settings.Notifications.NetworkError
+                                };
+                                await NotificationCenter.Current.Show(notification);
+                            });
+                        }
                         SendServiceMessage();
                         this.IsBusy = false;
                     }

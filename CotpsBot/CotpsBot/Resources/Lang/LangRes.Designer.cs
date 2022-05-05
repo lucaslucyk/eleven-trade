@@ -124,6 +124,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to get data. Unstable Internet Connection.
+        /// </summary>
+        internal static string cant_get_data {
+            get {
+                return ResourceManager.GetString("cant_get_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check your credentials and restart bot service.
         /// </summary>
         internal static string check_credentials_and_restart_bot {
@@ -228,6 +237,15 @@ namespace CotpsBot.Resources.Lang {
         internal static string no_internet_connection {
             get {
                 return ResourceManager.GetString("no_internet_connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Internet Connection to verify subscription.
+        /// </summary>
+        internal static string no_internet_verify_sub {
+            get {
+                return ResourceManager.GetString("no_internet_verify_sub", resourceCulture);
             }
         }
         

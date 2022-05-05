@@ -18,6 +18,7 @@ namespace CotpsBot.Services
         private static ICodeTranslator Translator => DependencyService.Get<ICodeTranslator>();
         private static IRequestService ApiClient => DependencyService.Get<IRequestService>();
         private static IBillingService BillingHandler => DependencyService.Get<IBillingService>();
+        private int _orderAttempts = 0;
 
         #endregion
 
@@ -103,20 +104,35 @@ namespace CotpsBot.Services
             var order = await ApiClient.CreateOrder();
             if (order.success)
             {
-                var confirm = await ApiClient.ConfirmOrder(order.data.orderId);
-
-                if (confirm.success)
+                try
                 {
-                    // TODO: Notify this ?
-                    // await App.Current.MainPage.CotpsBotkBarAsync(new SuccessSnackBar("Order confirmed succesfully."));
-                    await DoTransactions();
+                    var confirm = await ApiClient.ConfirmOrder(order.data.orderId);
+                    _orderAttempts = 0;
+                    if (confirm.success)
+                    {
+                        // operate again
+                        await DoTransactions();
+                    }
+                    else
+                    {
+                        var eco = Translator.Translate("error_confirming_order");
+                        NotifyMessage(Translator.Translate("order_not_confirmed"), 
+                            $"{eco} {order.data.orderId}.");
+                        // DependencyService.Get<IBotService>().Stop();
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    var eco = Translator.Translate("error_confirming_order");
-                    NotifyMessage(Translator.Translate("order_not_confirmed"), 
-                        $"{eco} {order.data.orderId}.");
-                    // DependencyService.Get<IBotService>().Stop();
+                    if (_orderAttempts < Settings.MaxOrderConfirmAttempts)
+                    {
+                        _orderAttempts += 1;
+                        await DoTransactions();
+                    }
+                    else
+                    {
+                        NotifyMessage(Translator.Translate("order_not_confirmed"), 
+                            Translator.Translate("error_confirming_order"));
+                    }
                 }
             }
         }

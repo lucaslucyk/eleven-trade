@@ -134,6 +134,11 @@ namespace CotpsBot.ViewModels
 
         private async Task<bool> EnsureSubscription()
         {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("no_internet_verify_sub")));
+                return false;
+            }
             try
             {
                 await BillingHandler.Connect();
@@ -188,54 +193,64 @@ namespace CotpsBot.ViewModels
 
         public async void SwitchClicked(object obj)
         {
-            this.BotStarting = true;
-
-
-            var svcRunning = DependencyService.Get<IBotService>().GetStatus();
-            
-            // allow stop but not start if not subscription
-            if (!svcRunning)
+            try
             {
-                if (!await this.EnsureSubscription())
+                this.BotStarting = true;
+            
+                var svcRunning = DependencyService.Get<IBotService>().GetStatus();
+            
+                // allow stop but not start if not subscription
+                if (!svcRunning)
                 {
+                    if (!await this.EnsureSubscription())
+                    {
+                        this.BotStarting = false;
+                        return;
+                    }
+                }
+            
+                if (!this.AreFieldsValid() && !svcRunning)
+                {
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("phone_password_required")));
                     this.BotStarting = false;
                     return;
                 }
-            }
+
+                // save credentials in settings for api service
+                if (!svcRunning)
+                {
+                    Settings.UserPhone = this.PhoneNumber.Value;
+                    Settings.UserPassword = this.Password.Value;
+
+                    // store credentials
+                    if (this.RememberPassword)
+                        await this.SaveFormData();
+                }
             
-            if (!this.AreFieldsValid() && !svcRunning)
-            {
-                await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("phone_password_required")));
+                if (!svcRunning)
+                {
+                    DependencyService.Get<IBotService>().Start();
+                    // this.SwitchMessage = "BOT STOP";
+                }
+                else
+                {
+                    DependencyService.Get<IBotService>().Stop();
+                    // this.SwitchMessage = "BOT START";
+                }
+            
+                if (DependencyService.Get<IBotService>().GetStatus())
+                    await this.RefreshScreenData();
+            
                 this.BotStarting = false;
-                return;
             }
-
-            // save credentials in settings for api service
-            if (!svcRunning)
+            catch (TaskCanceledException e)
             {
-                Settings.UserPhone = this.PhoneNumber.Value;
-                Settings.UserPassword = this.Password.Value;
-
-                // store credentials
-                if (this.RememberPassword)
-                    await this.SaveFormData();
-            }
-            
-            if (!svcRunning)
-            {
-                DependencyService.Get<IBotService>().Start();
-                // this.SwitchMessage = "BOT STOP";
-            }
-            else
-            {
+                this.BotStarting = false;
+                this.SwitchEnabled = true;
                 DependencyService.Get<IBotService>().Stop();
-                // this.SwitchMessage = "BOT START";
+                await App.Current.MainPage.DisplaySnackBarAsync(
+                    new ErrorSnackBar(Translator.Translate("cant_get_data")));
             }
-            
-            if (DependencyService.Get<IBotService>().GetStatus())
-                await this.RefreshScreenData();
-            
-            this.BotStarting = false;
         }
 
         private async void RecoveryFormData()
@@ -244,13 +259,13 @@ namespace CotpsBot.ViewModels
             var password = await SecureStorage.GetAsync("password");
             var rememberPwd = await SecureStorage.GetAsync("rememberPwd");
 
-            if (!String.IsNullOrEmpty(rememberPwd))
+            if (!string.IsNullOrEmpty(rememberPwd))
             {
-                this.PhoneNumber.Value = phoneNumber == null ? "" : phoneNumber;
-                this.Password.Value = password == null ? "" : password;
+                this.PhoneNumber.Value = phoneNumber ?? "";
+                this.Password.Value = password ?? "";
             }
 
-            this.RememberPassword = !String.IsNullOrEmpty(rememberPwd);
+            this.RememberPassword = !string.IsNullOrEmpty(rememberPwd);
         }
 
         private async Task SaveFormData()
@@ -275,7 +290,7 @@ namespace CotpsBot.ViewModels
             if (this.SwitchEnabled)
                 this.SwitchEnabled = !DependencyService.Get<IBotService>().GetBusyStatus();
 
-            if (this.IsRunning && this.SwitchEnabled)
+            if (this.IsRunning && this.SwitchEnabled && Connectivity.NetworkAccess == NetworkAccess.Internet)
                 this.Balance = await DependencyService.Get<IBotService>().GetBalance();
         }
 
@@ -284,8 +299,17 @@ namespace CotpsBot.ViewModels
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
             this.Balance = new TransactionsBalance();
-
-            await this.RefreshScreenData();
+            
+            var app = App.Current;
+            
+            try
+            {
+                await this.RefreshScreenData();
+            }
+            catch (TaskCanceledException e)
+            {
+                await App.Current.MainPage?.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
+            }
         }
 
         private bool AreFieldsValid()

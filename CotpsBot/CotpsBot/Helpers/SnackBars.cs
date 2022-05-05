@@ -42,4 +42,23 @@ namespace CotpsBot.Helpers
                 Actions = actions;
         }
     }
+    
+    public class WarningSnackBar: SnackBarOptions
+    {
+        public WarningSnackBar(string message, SnackBarActionOptions[]? actions = null)
+        {
+            MessageOptions = new MessageOptions
+            {
+                Foreground = Color.White,
+                Message = message,
+                Padding = new Thickness(5)
+            };
+            BackgroundColor = Color.FromHex("#f45858");
+            // BackgroundColor = Color.Red;
+            Duration = TimeSpan.FromSeconds(3);
+            CornerRadius = new Thickness(5);
+            if (actions != null)
+                Actions = actions;
+        }
+    }
 }

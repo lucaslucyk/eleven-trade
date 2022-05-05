@@ -299,9 +299,7 @@ namespace CotpsBot.ViewModels
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
             this.Balance = new TransactionsBalance();
-            
-            var app = App.Current;
-            
+
             try
             {
                 await this.RefreshScreenData();

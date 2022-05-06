@@ -4,6 +4,7 @@
              xmlns:viewModels="clr-namespace:CotpsBot.ViewModels"
              xmlns:converters="clr-namespace:CotpsBot.Converters"
              xmlns:extensions="clr-namespace:CotpsBot.Extensions"
+             xmlns:material="clr-namespace:MaterialDesign"
              x:Class="CotpsBot.Views.MainPage">
     <ContentPage.BindingContext>
         <viewModels:MainPageViewModel>
@@ -77,11 +78,24 @@
                         Margin="16, 10, 16, 0"
                         Text="{extensions:Translate total_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
-                    <Label
-                        Margin="16, 0, 16, 5"
-                        FontSize="40"
-                        Text="{Binding Balance.Total}"
-                        Style="{StaticResource NumberDescriptionLabelStyle}" />
+                    
+                    <StackLayout IsVisible="{Binding NoInternetConnection}">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NoInternetCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            Margin="16, 0, 16, 5"
+                            FontFamily="MIRR"
+                            Text="{x:Static material:MaterialDesignIcons.SyncProblem}"
+                            Style="{StaticResource NoInternetIconStyle}" />
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding NoInternetConnection, Converter={StaticResource InverseBoolConverter}}">
+                        <Label
+                            Margin="16, 0, 16, 5"
+                            Style="{StaticResource NumberDescriptionLabelStyle}" 
+                            FontSize="40"
+                            Text="{Binding Balance.Total}" />
+                    </StackLayout>
                 </StackLayout>
                 
                 <!-- Freeze section -->
@@ -90,11 +104,23 @@
                         Margin="16, 10, 16, 0"
                         Text="{extensions:Translate freeze_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
-                    <Label
-                        Margin="16, 0, 16, 5"
-                        FontSize="30"
-                        Text="{Binding Balance.Freeze}"
-                        Style="{StaticResource NumberDescriptionLabelStyle}" />
+                    <StackLayout IsVisible="{Binding NoInternetConnection}">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NoInternetCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            Margin="16, 0, 16, 5"
+                            FontFamily="MIRR"
+                            Text="{x:Static material:MaterialDesignIcons.SyncProblem}"
+                            Style="{StaticResource NoInternetIconStyle}" />
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding NoInternetConnection, Converter={StaticResource InverseBoolConverter}}">
+                        <Label
+                            Margin="16, 0, 16, 5"
+                            FontSize="30"
+                            Text="{Binding Balance.Freeze}"
+                            Style="{StaticResource NumberDescriptionLabelStyle}" />
+                    </StackLayout>
                 </StackLayout>
                 
                 <!-- Free section -->
@@ -103,11 +129,24 @@
                         Margin="16, 10, 16, 0"
                         Text="{extensions:Translate free_balance }"
                         Style="{StaticResource TitleLabelStyle}" />
-                    <Label
-                        Margin="16, 0, 16, 5"
-                        FontSize="30"
-                        Text="{Binding Balance.Free}"
-                        Style="{StaticResource NumberDescriptionLabelStyle}" />
+                    <StackLayout IsVisible="{Binding NoInternetConnection}">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NoInternetCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            
+                            Margin="16, 0, 16, 5"
+                            FontFamily="MIRR"
+                            Text="{x:Static material:MaterialDesignIcons.SyncProblem}"
+                            Style="{StaticResource NoInternetIconStyle}" />
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding NoInternetConnection, Converter={StaticResource InverseBoolConverter}}">
+                        <Label
+                            Margin="16, 0, 16, 5"
+                            FontSize="30"
+                            Text="{Binding Balance.Free}"
+                            Style="{StaticResource NumberDescriptionLabelStyle}" />
+                    </StackLayout>
                 </StackLayout>
                 
             </StackLayout>

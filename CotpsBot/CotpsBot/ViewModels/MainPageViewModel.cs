@@ -26,6 +26,7 @@ namespace CotpsBot.ViewModels
         private bool _switchEnabled = true;
         private bool _isRunning;
         private bool _botStarting;
+        private bool _noInternetConnection;
         private ValidatableObject<string> _phoneNumber;
         private ValidatableObject<string> _password;
         private DateTime _lastRun;
@@ -42,6 +43,9 @@ namespace CotpsBot.ViewModels
         {
             this.SwitchCommand = new Command(this.SwitchClicked);
             this.RememberPasswordCommand = new Command(this.RememberTapped);
+            this.NoInternetCommand = new Command(this.NoInternetTapped);
+
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
 
             this.InitializeProperties();
             this.AddValidationRules();
@@ -50,10 +54,20 @@ namespace CotpsBot.ViewModels
             HandleReceivedMessages();
         }
 
+        ~MainPageViewModel()
+        {
+            Connectivity.ConnectivityChanged -= Connectivity_ConnectivityChanged;
+        }
+
         #endregion
 
         #region Properties
 
+        public bool NoInternetConnection
+        {
+            get => this._noInternetConnection;
+            set => this.SetProperty(ref this._noInternetConnection, value);
+        }
         public string SwitchMessage
         {
             get => this._switchMessage;
@@ -120,11 +134,25 @@ namespace CotpsBot.ViewModels
 
         public Command RememberPasswordCommand { get; set; }
         public Command SwitchCommand { get; set; }
+        public Command NoInternetCommand { get; set; }
 
         #endregion
 
         #region Methods
-
+        
+        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            this.NoInternetConnection = e.NetworkAccess != NetworkAccess.Internet;
+        }
+        
+        private async void NoInternetTapped(object obj)
+        {
+            var msg = this.IsRunning
+                ? Translator.Translate("no_internet_tapped_running")
+                : Translator.Translate("no_internet_tapped_inactive");
+            await App.Current.MainPage.DisplayAlert("Info", msg, "OK");
+        }
+        
         private void RememberTapped(object obj)
         {
             this.RememberPassword = !this.RememberPassword;
@@ -191,7 +219,7 @@ namespace CotpsBot.ViewModels
             }
         }
 
-        public async void SwitchClicked(object obj)
+        private async void SwitchClicked(object obj)
         {
             try
             {
@@ -290,12 +318,24 @@ namespace CotpsBot.ViewModels
             if (this.SwitchEnabled)
                 this.SwitchEnabled = !DependencyService.Get<IBotService>().GetBusyStatus();
 
-            if (this.IsRunning && this.SwitchEnabled && Connectivity.NetworkAccess == NetworkAccess.Internet)
-                this.Balance = await DependencyService.Get<IBotService>().GetBalance();
+            if (this.IsRunning && this.SwitchEnabled)
+            {
+                if (Connectivity.NetworkAccess == NetworkAccess.Internet)
+                {
+                    this.Balance = await DependencyService.Get<IBotService>().GetBalance();
+                }
+                else
+                {
+                    if (App.Current.MainPage != null)
+                        await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
+                }
+                
+            }
         }
 
         private async void InitializeProperties()
         {
+            this.NoInternetConnection = Connectivity.NetworkAccess != NetworkAccess.Internet;
             this.PhoneNumber = new ValidatableObject<string>();
             this.Password = new ValidatableObject<string>();
             this.Balance = new TransactionsBalance();

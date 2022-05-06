@@ -141,4 +141,10 @@
     <data name="no_internet_verify_sub" xml:space="preserve">
         <value>No Internet Connection to verify subscription</value>
     </data>
+    <data name="no_internet_tapped_running" xml:space="preserve">
+        <value>No Internet connection to get data. The bot still working waiting for connection to start operating again.</value>
+    </data>
+    <data name="no_internet_tapped_inactive" xml:space="preserve">
+        <value>No Internet connection. Unable to start bot and get account details.</value>
+    </data>
 </root>

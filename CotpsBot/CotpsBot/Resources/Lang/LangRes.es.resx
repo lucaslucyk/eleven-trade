@@ -25,7 +25,7 @@
         <value>APAGADO</value>
     </data>
     <data name="bot_on" xml:space="preserve">
-        <value>ENCENDIDO</value>
+        <value>OPERANDO</value>
     </data>
     <data name="last_run" xml:space="preserve">
         <value>ÚLTIMA EJECUCIÓN</value>
@@ -140,5 +140,11 @@
     </data>
     <data name="no_internet_verify_sub" xml:space="preserve">
         <value>Sin conexión a Internet para verificar la suscripción</value>
+    </data>
+    <data name="no_internet_tapped_running" xml:space="preserve">
+        <value>No hay conexión a Internet para obtener datos. No te preocupes, el bot sigue funcionando esperando conexión para volver a operar.</value>
+    </data>
+    <data name="no_internet_tapped_inactive" xml:space="preserve">
+        <value>No hay conexión a Internet. No se puede iniciar el bot y obtener datos de la cuenta.</value>
     </data>
 </root>

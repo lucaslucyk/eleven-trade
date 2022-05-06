@@ -79,6 +79,16 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>LangRes.es.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <None Remove="Resources\Fonts\Material\MaterialIcons-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Material\MaterialIcons-Regular.ttf" />
+      <None Remove="Resources\Fonts\Material\MaterialIconsOutlined-Regular.otf" />
+      <EmbeddedResource Include="Resources\Fonts\Material\MaterialIconsOutlined-Regular.otf" />
+      <None Remove="Resources\Fonts\Material\MaterialIconsRound-Regular.otf" />
+      <EmbeddedResource Include="Resources\Fonts\Material\MaterialIconsRound-Regular.otf" />
+      <None Remove="Resources\Fonts\Material\MaterialIconsSharp-Regular.otf" />
+      <EmbeddedResource Include="Resources\Fonts\Material\MaterialIconsSharp-Regular.otf" />
+      <None Remove="Resources\Fonts\Material\MaterialIconsTwoTone-Regular.otf" />
+      <EmbeddedResource Include="Resources\Fonts\Material\MaterialIconsTwoTone-Regular.otf" />
     </ItemGroup>
 
     <ItemGroup>

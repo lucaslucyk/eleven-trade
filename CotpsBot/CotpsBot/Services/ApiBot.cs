@@ -141,10 +141,10 @@ namespace CotpsBot.Services
         {
             foreach (var level in Settings.TeamLevels)
             {
-                var teamInfo = await ApiClient.GetTeamInfo(level);
-                if (!teamInfo.success || teamInfo.code < 200 || teamInfo.code >= 400) continue;
                 try
                 {
+                    var teamInfo = await ApiClient.GetTeamInfo(level);
+                    if (!teamInfo.success || teamInfo.code < 200 || teamInfo.code >= 400) continue;
                     var converted = Convert.ToDouble(teamInfo.data?.detail?.remainder);
                     // if (!double.TryParse(teamInfo.data?.detail?.remainder, out var converted)) continue;
                     if (!(converted >= 0.01)) continue;
@@ -258,35 +258,41 @@ namespace CotpsBot.Services
             // disable btn
             SendBtnControlStatus(false);
 
-            var form = await GetLoginForm();
-            var loginResult = await ApiClient.LoginAsync(form);
-            
-            if (loginResult.success)
+            try
             {
-                // remove possible login error
-                TryClearMessage(Settings.Notifications.LoginError);
-                
-                // try to collect residuals
-                await ReceiveProfits();
-                
-                // try to create and confirm orders
-                await this.DoTransactions();
-                    
-                // logout after of do actions
-                ApiClient.Logout();
+                var form = await GetLoginForm();
+                var loginResult = await ApiClient.LoginAsync(form);
+
+                if (loginResult.success)
+                {
+                    // remove possible login error
+                    TryClearMessage(Settings.Notifications.LoginError);
+
+                    // try to collect residuals
+                    await ReceiveProfits();
+
+                    // try to create and confirm orders
+                    await this.DoTransactions();
+
+                    // logout after of do actions
+                    ApiClient.Logout();
+                }
+                else
+                {
+                    NotifyMessage(
+                        Translator.Translate("cotps_login_error"),
+                        Translator.Translate("check_credentials_and_restart_bot"),
+                        id: Settings.Notifications.LoginError);
+                    if (loginResult.code == 411)
+                        DependencyService.Get<IBotService>().Stop();
+                }
+
             }
-            else
+            finally
             {
-                NotifyMessage(
-                    Translator.Translate("cotps_login_error"), 
-                    Translator.Translate("check_credentials_and_restart_bot"),
-                    id: Settings.Notifications.LoginError);
-                if (loginResult.code == 411)
-                    DependencyService.Get<IBotService>().Stop();
+                // enable btn
+                SendBtnControlStatus(true);
             }
-            
-            // enable btn
-            SendBtnControlStatus(true);
         }
 
         public async Task<TransactionsBalance> LoginAndGetBalance()

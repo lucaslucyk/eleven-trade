@@ -52,6 +52,7 @@
         <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
         <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
         <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
+        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />

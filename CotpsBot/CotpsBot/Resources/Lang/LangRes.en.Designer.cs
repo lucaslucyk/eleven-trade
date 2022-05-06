@@ -241,6 +241,24 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Internet connection. Unable to start bot and get account details..
+        /// </summary>
+        internal static string no_internet_tapped_inactive {
+            get {
+                return ResourceManager.GetString("no_internet_tapped_inactive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Internet connection to get data. The bot still working waiting for connection to start operating again..
+        /// </summary>
+        internal static string no_internet_tapped_running {
+            get {
+                return ResourceManager.GetString("no_internet_tapped_running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Internet Connection to verify subscription.
         /// </summary>
         internal static string no_internet_verify_sub {

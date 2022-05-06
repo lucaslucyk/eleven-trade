@@ -4,6 +4,15 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     
+    <Style x:Key="NoInternetIconStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontFamily" Value="MIRR" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryWhite}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
+    </Style>
+    
     <Style x:Key="BotStatusStyle" TargetType="Label">
         <Setter Property="FontSize" Value="30" />
         <!-- <Setter Property="FontAttributes" Value="Bold" /> -->

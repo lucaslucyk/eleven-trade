@@ -13,6 +13,11 @@ using Xamarin.Forms.Xaml;
 [assembly: ExportFont("TitilliumWeb-Regular.ttf", Alias="TitilliumWeb-Regular")]
 [assembly: ExportFont("TitilliumWeb-Bold.ttf", Alias="TitilliumWeb-Bold")]
 [assembly: ExportFont("TitilliumWeb-SemiBold.ttf", Alias="TitilliumWeb-SemiBold")]
+[assembly: ExportFont("MaterialIconsOutlined-Regular.otf", Alias = "MIOR")]
+[assembly: ExportFont("MaterialIcons-Regular.ttf", Alias = "MIR")]
+[assembly: ExportFont("MaterialIconsRound-Regular.otf", Alias = "MIRR")]
+[assembly: ExportFont("MaterialIconsSharp-Regular.otf", Alias = "MISR")]
+[assembly: ExportFont("MaterialIconsTwoTone-Regular.otf", Alias = "MITTR")]
 namespace CotpsBot
 {
     public partial class App : Application

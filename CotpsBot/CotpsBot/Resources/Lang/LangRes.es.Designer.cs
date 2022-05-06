@@ -88,7 +88,7 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ENCENDIDO.
+        ///   Looks up a localized string similar to OPERANDO.
         /// </summary>
         internal static string bot_on {
             get {
@@ -237,6 +237,24 @@ namespace CotpsBot.Resources.Lang {
         internal static string no_internet_connection {
             get {
                 return ResourceManager.GetString("no_internet_connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No hay conexión a Internet. No se puede iniciar el bot y obtener datos de la cuenta..
+        /// </summary>
+        internal static string no_internet_tapped_inactive {
+            get {
+                return ResourceManager.GetString("no_internet_tapped_inactive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No hay conexión a Internet para obtener datos. No te preocupes, el bot sigue funcionando esperando conexión para volver a operar..
+        /// </summary>
+        internal static string no_internet_tapped_running {
+            get {
+                return ResourceManager.GetString("no_internet_tapped_running", resourceCulture);
             }
         }
         

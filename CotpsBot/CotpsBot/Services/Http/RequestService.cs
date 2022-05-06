@@ -96,10 +96,10 @@ namespace CotpsBot.Services.Http
                 if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     // TODO: Handle 401 exception for expired `gateway_session` cookie or another code
-                    throw new Exception(content);
+                    throw new ApiException("COTPS API Unauthorized");
                 }
 
-                throw new HttpRequestException(content);
+                throw new ApiException(content);
             }
         }
         

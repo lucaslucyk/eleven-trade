@@ -142,6 +142,42 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact support if the error persists.
+        /// </summary>
+        internal static string contact_support_error_persist {
+            get {
+                return ResourceManager.GetString("contact_support_error_persist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to COTPS API Error.
+        /// </summary>
+        internal static string COTPS_API_Error {
+            get {
+                return ResourceManager.GetString("COTPS API Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error in the COTPS API. Waiting to try again..
+        /// </summary>
+        internal static string cotps_api_error_waiting {
+            get {
+                return ResourceManager.GetString("cotps_api_error_waiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to COTPS API Unauthorized.
+        /// </summary>
+        internal static string COTPS_API_Unauthorized {
+            get {
+                return ResourceManager.GetString("COTPS API Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to COTPS Login Error.
         /// </summary>
         internal static string cotps_login_error {

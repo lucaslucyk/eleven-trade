@@ -147,4 +147,16 @@
     <data name="no_internet_tapped_inactive" xml:space="preserve">
         <value>No hay conexión a Internet. No se puede iniciar el bot y obtener datos de la cuenta.</value>
     </data>
+    <data name="COTPS API Unauthorized" xml:space="preserve">
+        <value>No autorizado en la API de COTPS</value>
+    </data>
+    <data name="COTPS API Error" xml:space="preserve">
+        <value>Error en la API de COTPS</value>
+    </data>
+    <data name="cotps_api_error_waiting" xml:space="preserve">
+        <value>Hubo un error en la API de COTPS. Esperando para intentar nuevamente.</value>
+    </data>
+    <data name="contact_support_error_persist" xml:space="preserve">
+        <value>Contacte a soporte si el error persiste</value>
+    </data>
 </root>

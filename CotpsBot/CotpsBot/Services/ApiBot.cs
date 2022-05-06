@@ -248,6 +248,7 @@ namespace CotpsBot.Services
             
             // clear no internet connection message
             TryClearMessage(Settings.Notifications.NetworkError);
+            TryClearMessage(Settings.Notifications.UnknownError);
 
             if (!await EnsureSubscription())
             {

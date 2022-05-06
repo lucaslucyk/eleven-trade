@@ -108,7 +108,7 @@ namespace CotpsBot.Droid
                         {
                             await _apiBot.LoginAndOperate();
                         }
-                        catch (InternetException e)
+                        catch (InternetException)
                         {
                             Device.BeginInvokeOnMainThread(async () =>
                             {
@@ -119,6 +119,36 @@ namespace CotpsBot.Droid
                                     Description = Translator.Translate("waiting_internet_to_operate"),
                                     ReturningData = "COTPS Service",
                                     NotificationId = Settings.Notifications.NetworkError
+                                };
+                                await NotificationCenter.Current.Show(notification);
+                            });
+                        }
+                        catch (ApiException)
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                var notification = new NotificationRequest
+                                {
+                                    BadgeNumber = 1,
+                                    Title = Translator.Translate("COTPS API Error"),
+                                    Description = Translator.Translate("cotps_api_error_waiting"),
+                                    ReturningData = "COTPS API Error",
+                                    NotificationId = Settings.Notifications.NetworkError
+                                };
+                                await NotificationCenter.Current.Show(notification);
+                            });
+                        }
+                        catch (Exception)
+                        {
+                            Device.BeginInvokeOnMainThread(async () =>
+                            {
+                                var notification = new NotificationRequest
+                                {
+                                    BadgeNumber = 1,
+                                    Title = Translator.Translate("something_was_wrong"),
+                                    Description = Translator.Translate("contact_support_error_persist"),
+                                    ReturningData = "Something was wrong",
+                                    NotificationId = Settings.Notifications.UnknownError
                                 };
                                 await NotificationCenter.Current.Show(notification);
                             });

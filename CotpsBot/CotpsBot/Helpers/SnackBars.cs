@@ -49,11 +49,11 @@ namespace CotpsBot.Helpers
         {
             MessageOptions = new MessageOptions
             {
-                Foreground = Color.White,
+                Foreground = Color.Black,
                 Message = message,
                 Padding = new Thickness(5)
             };
-            BackgroundColor = Color.FromHex("#f45858");
+            BackgroundColor = Color.FromHex("#FEF100");
             // BackgroundColor = Color.Red;
             Duration = TimeSpan.FromSeconds(3);
             CornerRadius = new Thickness(5);

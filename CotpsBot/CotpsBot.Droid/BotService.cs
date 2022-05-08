@@ -146,7 +146,7 @@ namespace CotpsBot.Droid
                                 {
                                     BadgeNumber = 1,
                                     Title = Translator.Translate("something_was_wrong"),
-                                    Description = Translator.Translate("contact_support_error_persist"),
+                                    Description = Translator.Translate("api_trying_again_five_min"),
                                     ReturningData = "Something was wrong",
                                     NotificationId = Settings.Notifications.UnknownError
                                 };

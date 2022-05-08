@@ -159,4 +159,7 @@
     <data name="contact_support_error_persist" xml:space="preserve">
         <value>Contact support if the error persists</value>
     </data>
+    <data name="api_trying_again_five_min" xml:space="preserve">
+        <value>Something went wrong with the COTPS API. It will try again in 5 minutes.</value>
+    </data>
 </root>

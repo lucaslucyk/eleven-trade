@@ -61,6 +61,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Something went wrong with the COTPS API. It will try again in 5 minutes..
+        /// </summary>
+        internal static string api_trying_again_five_min {
+            get {
+                return ResourceManager.GetString("api_trying_again_five_min", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Billing service not available.
         /// </summary>
         internal static string billing_service_not_available {

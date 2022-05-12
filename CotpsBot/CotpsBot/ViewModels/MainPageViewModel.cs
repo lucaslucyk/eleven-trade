@@ -344,10 +344,19 @@ namespace CotpsBot.ViewModels
             {
                 await this.RefreshScreenData();
             }
-            catch (TaskCanceledException e)
+            catch (Exception exc)
             {
-                if (App.Current.MainPage != null)
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
+                string msg;
+                if (exc is OperationCanceledException || exc is TimeoutException || exc is TaskCanceledException)
+                {
+                    msg = Translator.Translate("cant_get_data");
+                }
+                else
+                {
+                    msg = Translator.Translate("something_wrong_try_again");
+                }
+                if (App.Current.MainPage != null && msg != string.Empty)
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(msg));
             }
         }
 

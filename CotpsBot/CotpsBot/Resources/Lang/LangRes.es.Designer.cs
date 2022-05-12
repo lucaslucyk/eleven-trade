@@ -403,6 +403,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Algo salió mal. Por favor, intente nuevamente..
+        /// </summary>
+        internal static string something_wrong_try_again {
+            get {
+                return ResourceManager.GetString("something_wrong_try_again", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complete la suscripción para continuar.
         /// </summary>
         internal static string sub_complete_to_proceed {

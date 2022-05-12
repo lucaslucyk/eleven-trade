@@ -162,4 +162,7 @@
     <data name="api_trying_again_five_min" xml:space="preserve">
         <value>Something went wrong with the COTPS API. It will try again in 5 minutes.</value>
     </data>
+    <data name="something_wrong_try_again" xml:space="preserve">
+        <value>Something was wrong. Please try again.</value>
+    </data>
 </root>

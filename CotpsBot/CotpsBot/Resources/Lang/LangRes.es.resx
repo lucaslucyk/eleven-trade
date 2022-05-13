@@ -165,4 +165,16 @@
     <data name="something_wrong_try_again" xml:space="preserve">
         <value>Algo salió mal. Por favor, intente nuevamente.</value>
     </data>
+    <data name="update_available" xml:space="preserve">
+        <value>Actualización disponible</value>
+    </data>
+    <data name="new_version_update_now" xml:space="preserve">
+        <value>Hay una nueva versión disponible. ¿Te gustaría actualizar ahora?</value>
+    </data>
+    <data name="update" xml:space="preserve">
+        <value>Actualizar</value>
+    </data>
+    <data name="not_now" xml:space="preserve">
+        <value>Ahora no</value>
+    </data>
 </root>

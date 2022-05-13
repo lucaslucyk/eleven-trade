@@ -27,7 +27,7 @@ namespace CotpsBot.Helpers
         #region Constants
         
         // base
-        public static readonly string CurrentVersion = "1.7.17";
+        public static readonly string CurrentVersion = "1.8.17";
         
         // order confirm attempts
         public static readonly int MaxOrderConfirmAttempts = 5;

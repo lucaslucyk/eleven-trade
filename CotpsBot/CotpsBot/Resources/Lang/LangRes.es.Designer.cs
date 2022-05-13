@@ -277,6 +277,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hay una nueva versión disponible. ¿Te gustaría actualizar ahora?.
+        /// </summary>
+        internal static string new_version_update_now {
+            get {
+                return ResourceManager.GetString("new_version_update_now", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sin conexión a Internet.
         /// </summary>
         internal static string no_internet_connection {
@@ -309,6 +318,15 @@ namespace CotpsBot.Resources.Lang {
         internal static string no_internet_verify_sub {
             get {
                 return ResourceManager.GetString("no_internet_verify_sub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ahora no.
+        /// </summary>
+        internal static string not_now {
+            get {
+                return ResourceManager.GetString("not_now", resourceCulture);
             }
         }
         
@@ -471,6 +489,24 @@ namespace CotpsBot.Resources.Lang {
         internal static string unsupported_device {
             get {
                 return ResourceManager.GetString("unsupported_device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualizar.
+        /// </summary>
+        internal static string update {
+            get {
+                return ResourceManager.GetString("update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualización disponible.
+        /// </summary>
+        internal static string update_available {
+            get {
+                return ResourceManager.GetString("update_available", resourceCulture);
             }
         }
         

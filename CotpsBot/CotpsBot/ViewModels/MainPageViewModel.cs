@@ -8,6 +8,7 @@ using CotpsBot.Services;
 using CotpsBot.Validators;
 using CotpsBot.Validators.Rules;
 using CotpsBot.Helpers;
+using Plugin.LatestVersion;
 using Plugin.LocalNotification;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
@@ -52,6 +53,8 @@ namespace CotpsBot.ViewModels
             this.RecoveryFormData();
 
             HandleReceivedMessages();
+
+            this.CheckUpdate();
         }
 
         ~MainPageViewModel()
@@ -357,6 +360,32 @@ namespace CotpsBot.ViewModels
                 }
                 if (App.Current.MainPage != null && msg != string.Empty)
                     await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(msg));
+            }
+        }
+
+        private async void CheckUpdate()
+        {
+            try
+            {
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                    return;
+                
+                if (await CrossLatestVersion.Current.IsUsingLatestVersion())
+                    return;
+
+                var update = await App.Current.MainPage.DisplayAlert(
+                    Translator.Translate("update_available"), 
+                    Translator.Translate("new_version_update_now"), 
+                    Translator.Translate("update"), 
+                    Translator.Translate("not_now"));
+                if (update)
+                {
+                    await CrossLatestVersion.Current.OpenAppInStore();
+                }
+            }
+            catch (Exception)
+            {
+                // nothing
             }
         }
 

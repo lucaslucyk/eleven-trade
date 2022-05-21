@@ -232,6 +232,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ending COTPS operations to display values.
+        /// </summary>
+        internal static string ending_cotps_operations {
+            get {
+                return ResourceManager.GetString("ending_cotps_operations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error confirming order.
         /// </summary>
         internal static string error_confirming_order {

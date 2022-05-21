@@ -268,9 +268,28 @@ namespace CotpsBot.ViewModels
                     DependencyService.Get<IBotService>().Stop();
                     // this.SwitchMessage = "BOT START";
                 }
-            
+
                 if (DependencyService.Get<IBotService>().GetStatus())
-                    await this.RefreshScreenData();
+                {
+                    try
+                    {
+                        await Task.Delay(500);
+                        await this.RefreshScreenData();
+                    }
+                    catch (Exception exc)
+                    {
+                        if (exc is OperationCanceledException || exc is TimeoutException || exc is TaskCanceledException)
+                        {
+                            // msg = Translator.Translate("ending_cotps_operations");
+                            if (App.Current.MainPage != null)
+                            {
+                                await App.Current.MainPage.DisplaySnackBarAsync(
+                                    new WarningSnackBar(Translator.Translate("ending_cotps_operations")));
+                            }
+                        }
+                    }
+                    
+                }
             
                 this.BotStarting = false;
             }

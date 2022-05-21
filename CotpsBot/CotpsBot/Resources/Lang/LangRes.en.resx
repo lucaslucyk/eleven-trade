@@ -177,4 +177,7 @@
     <data name="not_now" xml:space="preserve">
         <value>Not now</value>
     </data>
+    <data name="ending_cotps_operations" xml:space="preserve">
+        <value>Ending COTPS operations to display values</value>
+    </data>
 </root>

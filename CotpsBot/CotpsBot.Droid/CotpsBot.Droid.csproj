@@ -34,7 +34,7 @@
         <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
         <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
         <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
-        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
@@ -52,7 +52,7 @@
         <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
         <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
         <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
-        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />

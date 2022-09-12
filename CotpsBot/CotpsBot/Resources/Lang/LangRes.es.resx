@@ -162,4 +162,22 @@
     <data name="api_trying_again_five_min" xml:space="preserve">
         <value>Algo salió mal con la API de COTPS. Se intentará nuevamente en 5 minutos.</value>
     </data>
+    <data name="something_wrong_try_again" xml:space="preserve">
+        <value>Algo salió mal. Por favor, intente nuevamente.</value>
+    </data>
+    <data name="update_available" xml:space="preserve">
+        <value>Actualización disponible</value>
+    </data>
+    <data name="new_version_update_now" xml:space="preserve">
+        <value>Hay una nueva versión disponible. ¿Te gustaría actualizar ahora?</value>
+    </data>
+    <data name="update" xml:space="preserve">
+        <value>Actualizar</value>
+    </data>
+    <data name="not_now" xml:space="preserve">
+        <value>Ahora no</value>
+    </data>
+    <data name="ending_cotps_operations" xml:space="preserve">
+        <value>Finalizando operaciones de COTPS para mostrar valores</value>
+    </data>
 </root>

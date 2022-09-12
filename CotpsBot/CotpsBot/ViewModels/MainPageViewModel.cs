@@ -8,6 +8,7 @@ using CotpsBot.Services;
 using CotpsBot.Validators;
 using CotpsBot.Validators.Rules;
 using CotpsBot.Helpers;
+using Plugin.LatestVersion;
 using Plugin.LocalNotification;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
@@ -52,6 +53,8 @@ namespace CotpsBot.ViewModels
             this.RecoveryFormData();
 
             HandleReceivedMessages();
+
+            this.CheckUpdate();
         }
 
         ~MainPageViewModel()
@@ -265,9 +268,28 @@ namespace CotpsBot.ViewModels
                     DependencyService.Get<IBotService>().Stop();
                     // this.SwitchMessage = "BOT START";
                 }
-            
+
                 if (DependencyService.Get<IBotService>().GetStatus())
-                    await this.RefreshScreenData();
+                {
+                    try
+                    {
+                        await Task.Delay(500);
+                        await this.RefreshScreenData();
+                    }
+                    catch (Exception exc)
+                    {
+                        if (exc is OperationCanceledException || exc is TimeoutException || exc is TaskCanceledException)
+                        {
+                            // msg = Translator.Translate("ending_cotps_operations");
+                            if (App.Current.MainPage != null)
+                            {
+                                await App.Current.MainPage.DisplaySnackBarAsync(
+                                    new WarningSnackBar(Translator.Translate("ending_cotps_operations")));
+                            }
+                        }
+                    }
+                    
+                }
             
                 this.BotStarting = false;
             }
@@ -344,10 +366,45 @@ namespace CotpsBot.ViewModels
             {
                 await this.RefreshScreenData();
             }
-            catch (TaskCanceledException e)
+            catch (Exception exc)
             {
-                if (App.Current.MainPage != null)
-                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(Translator.Translate("cant_get_data")));
+                string msg;
+                if (exc is OperationCanceledException || exc is TimeoutException || exc is TaskCanceledException)
+                {
+                    msg = Translator.Translate("cant_get_data");
+                }
+                else
+                {
+                    msg = Translator.Translate("something_wrong_try_again");
+                }
+                if (App.Current.MainPage != null && msg != string.Empty)
+                    await App.Current.MainPage.DisplaySnackBarAsync(new ErrorSnackBar(msg));
+            }
+        }
+
+        private async void CheckUpdate()
+        {
+            try
+            {
+                if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+                    return;
+                
+                if (await CrossLatestVersion.Current.IsUsingLatestVersion())
+                    return;
+
+                var update = await App.Current.MainPage.DisplayAlert(
+                    Translator.Translate("update_available"), 
+                    Translator.Translate("new_version_update_now"), 
+                    Translator.Translate("update"), 
+                    Translator.Translate("not_now"));
+                if (update)
+                {
+                    await CrossLatestVersion.Current.OpenAppInStore();
+                }
+            }
+            catch (Exception)
+            {
+                // nothing
             }
         }
 

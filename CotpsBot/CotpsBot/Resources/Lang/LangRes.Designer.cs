@@ -232,6 +232,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ending COTPS operations to display values.
+        /// </summary>
+        internal static string ending_cotps_operations {
+            get {
+                return ResourceManager.GetString("ending_cotps_operations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error confirming order.
         /// </summary>
         internal static string error_confirming_order {
@@ -277,6 +286,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is a new version available. Would you like to update now?.
+        /// </summary>
+        internal static string new_version_update_now {
+            get {
+                return ResourceManager.GetString("new_version_update_now", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Internet Connection.
         /// </summary>
         internal static string no_internet_connection {
@@ -309,6 +327,15 @@ namespace CotpsBot.Resources.Lang {
         internal static string no_internet_verify_sub {
             get {
                 return ResourceManager.GetString("no_internet_verify_sub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not now.
+        /// </summary>
+        internal static string not_now {
+            get {
+                return ResourceManager.GetString("not_now", resourceCulture);
             }
         }
         
@@ -403,6 +430,15 @@ namespace CotpsBot.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Something was wrong. Please try again..
+        /// </summary>
+        internal static string something_wrong_try_again {
+            get {
+                return ResourceManager.GetString("something_wrong_try_again", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complete the subscription to proceed.
         /// </summary>
         internal static string sub_complete_to_proceed {
@@ -462,6 +498,24 @@ namespace CotpsBot.Resources.Lang {
         internal static string unsupported_device {
             get {
                 return ResourceManager.GetString("unsupported_device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        internal static string update {
+            get {
+                return ResourceManager.GetString("update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update available.
+        /// </summary>
+        internal static string update_available {
+            get {
+                return ResourceManager.GetString("update_available", resourceCulture);
             }
         }
         

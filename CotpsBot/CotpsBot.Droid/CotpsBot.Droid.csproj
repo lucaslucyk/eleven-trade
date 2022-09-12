@@ -34,7 +34,7 @@
         <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
         <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
         <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
-        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <DebugSymbols>true</DebugSymbols>
@@ -52,7 +52,7 @@
         <AndroidSigningStorePass>GrupoElede.2022</AndroidSigningStorePass>
         <AndroidSigningKeyAlias>GoogleSignature</AndroidSigningKeyAlias>
         <AndroidSigningKeyPass>GrupoElede.2022</AndroidSigningKeyPass>
-        <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
+        <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="Mono.Android" />
@@ -65,6 +65,7 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Plugin.InAppBilling" Version="5.3.2-beta" />
         <PackageReference Include="Plugin.LocalNotification" Version="9.2.0" />
+        <PackageReference Include="Xam.Plugin.LatestVersion" Version="2.1.0" />
         <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
         <PackageReference Include="Xamarin.Android.Google.BillingClient" Version="4.0.0" />
         <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />
